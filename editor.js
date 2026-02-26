@@ -295,7 +295,54 @@ function attachEventListeners() {
     document.querySelectorAll('.swimlane-content').forEach(lane => {
         lane.addEventListener('dragover', e => e.preventDefault());
         lane.addEventListener('drop', handleDrop);
+        lane.addEventListener('dblclick', handleLaneDblClick);
     });
+}
+
+function handleLaneDblClick(e) {
+    // Create a free text note without toolbar button.
+    // Ignore when user double-clicks an existing box/text.
+    if (connectionMode) return;
+    if (e.target && e.target.closest && e.target.closest('.process-box')) return;
+
+    const laneEl = e.currentTarget;
+    const laneIdx = parseInt(laneEl?.dataset?.lane);
+    if (!Number.isFinite(laneIdx) || !currentProcess?.swimlanes?.[laneIdx]) return;
+
+    const rect = laneEl.getBoundingClientRect();
+    const x = Math.max(0, Math.round(e.clientX - rect.left));
+    const y = Math.max(0, Math.round(e.clientY - rect.top));
+
+    const id = `text-${Date.now()}`;
+    const newBox = {
+        id,
+        type: 'text',
+        text: 'Text',
+        x,
+        y
+    };
+
+    currentProcess.swimlanes[laneIdx].boxes.push(newBox);
+
+    // Insert DOM node without full rerender
+    laneEl.insertAdjacentHTML('beforeend', createBoxHTML(newBox));
+    const boxEl = document.getElementById(id);
+    if (boxEl) {
+        boxEl.addEventListener('dragstart', handleDragStart);
+        boxEl.addEventListener('dragend', handleDragEnd);
+        boxEl.addEventListener('click', handleBoxClick);
+
+        // Focus the text immediately
+        const span = boxEl.querySelector('span');
+        if (span) {
+            try {
+                span.focus();
+                document.execCommand?.('selectAll', false, null);
+            } catch {
+                // ignore
+            }
+        }
+    }
 }
 
 function handleDragStart(e) {

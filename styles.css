@@ -317,6 +317,16 @@ body {
     height: 100px;
 }
 
+/* Free text note (created via double click) */
+.box-text {
+    background: transparent;
+    border: none;
+    padding: 4px 6px;
+    min-width: 40px;
+    min-height: 18px;
+    user-select: text;
+}
+
 /* Arrows */
 .arrow-layer {
     position: absolute;
