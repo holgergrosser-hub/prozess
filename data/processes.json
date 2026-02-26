@@ -1,0 +1,1874 @@
+{
+  "processes": [
+    {
+      "key": "managementbewertung",
+      "title": "Managementbewertung",
+      "swimlanes": [
+        {
+          "name": "QMB",
+          "boxes": [
+            {
+              "id": "mb-1",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 50,
+              "y": 30
+            },
+            {
+              "id": "mb-2",
+              "type": "document",
+              "text": "Risiken- und\nChancenanalyse",
+              "x": 180,
+              "y": 40
+            },
+            {
+              "id": "mb-3",
+              "type": "document",
+              "text": "Auditberichte",
+              "x": 340,
+              "y": 40
+            },
+            {
+              "id": "mb-4",
+              "type": "document",
+              "text": "Ziele und\nProzesskennzahlen",
+              "x": 500,
+              "y": 40
+            },
+            {
+              "id": "mb-5",
+              "type": "document",
+              "text": "Kunden-\nrückmeldungen",
+              "x": 660,
+              "y": 40
+            },
+            {
+              "id": "mb-6",
+              "type": "document",
+              "text": "Liste der Normen\nund Gesetze",
+              "x": 820,
+              "y": 40
+            },
+            {
+              "id": "mb-7",
+              "type": "document",
+              "text": "Lieferanten-\nbewertung",
+              "x": 980,
+              "y": 40
+            },
+            {
+              "id": "mb-8",
+              "type": "action",
+              "text": "Entwurf vorbereiten",
+              "x": 500,
+              "y": 140
+            }
+          ]
+        },
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "mb-9",
+              "type": "action",
+              "text": "Jährliche Management-\nbewertung erstellen",
+              "x": 500,
+              "y": 20
+            },
+            {
+              "id": "mb-10",
+              "type": "document",
+              "text": "Management-\nbewertung",
+              "x": 680,
+              "y": 30
+            },
+            {
+              "id": "mb-11",
+              "type": "decision",
+              "text": "Maßnahme\nerforderlich?",
+              "x": 880,
+              "y": 20
+            },
+            {
+              "id": "mb-12",
+              "type": "start-end",
+              "text": "Prozess\nabgeschlossen",
+              "x": 1080,
+              "y": 30
+            },
+            {
+              "id": "mb-13",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 880,
+              "y": 150
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "mb-2",
+          "to": "mb-8"
+        },
+        {
+          "from": "mb-3",
+          "to": "mb-8"
+        },
+        {
+          "from": "mb-4",
+          "to": "mb-8"
+        },
+        {
+          "from": "mb-5",
+          "to": "mb-8"
+        },
+        {
+          "from": "mb-6",
+          "to": "mb-8"
+        },
+        {
+          "from": "mb-7",
+          "to": "mb-8"
+        },
+        {
+          "from": "mb-8",
+          "to": "mb-9"
+        },
+        {
+          "from": "mb-9",
+          "to": "mb-10"
+        },
+        {
+          "from": "mb-10",
+          "to": "mb-11"
+        },
+        {
+          "from": "mb-11",
+          "to": "mb-12",
+          "label": "Nein"
+        },
+        {
+          "from": "mb-11",
+          "to": "mb-13",
+          "label": "Ja"
+        }
+      ]
+    },
+    {
+      "key": "risiken-chancen",
+      "title": "Risiken und Chancen",
+      "swimlanes": [
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "rc-1",
+              "type": "action",
+              "text": "Interessierte Parteien\ndefinieren und\nAnforderungen\nbestimmen",
+              "x": 50,
+              "y": 30
+            },
+            {
+              "id": "rc-2",
+              "type": "action",
+              "text": "Interne + Externe\nThemen festlegen",
+              "x": 50,
+              "y": 140
+            },
+            {
+              "id": "rc-3",
+              "type": "document",
+              "text": "Management-\nbewertung",
+              "x": 50,
+              "y": 250
+            },
+            {
+              "id": "rc-4",
+              "type": "action",
+              "text": "Risiken und Chancen\nermitteln\n(min. 1 x jährlich\nund bei Bedarf)",
+              "x": 290,
+              "y": 80
+            },
+            {
+              "id": "rc-5",
+              "type": "action",
+              "text": "Einstufung\nvornehmen",
+              "x": 500,
+              "y": 80
+            },
+            {
+              "id": "rc-6",
+              "type": "document",
+              "text": "Risiken- und\nChancenanalyse",
+              "x": 290,
+              "y": 190
+            },
+            {
+              "id": "rc-7",
+              "type": "document",
+              "text": "Risiken- und\nChancenanalyse",
+              "x": 500,
+              "y": 190
+            },
+            {
+              "id": "rc-8",
+              "type": "decision",
+              "text": "Maßnahmen\nerforderlich?",
+              "x": 700,
+              "y": 80
+            },
+            {
+              "id": "rc-9",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 900,
+              "y": 60
+            },
+            {
+              "id": "rc-10",
+              "type": "start-end",
+              "text": "Management-\nbewertung",
+              "x": 700,
+              "y": 190
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "rc-1",
+          "to": "rc-4"
+        },
+        {
+          "from": "rc-2",
+          "to": "rc-4"
+        },
+        {
+          "from": "rc-3",
+          "to": "rc-4"
+        },
+        {
+          "from": "rc-4",
+          "to": "rc-5"
+        },
+        {
+          "from": "rc-4",
+          "to": "rc-6"
+        },
+        {
+          "from": "rc-5",
+          "to": "rc-7"
+        },
+        {
+          "from": "rc-5",
+          "to": "rc-8"
+        },
+        {
+          "from": "rc-8",
+          "to": "rc-9",
+          "label": "Ja"
+        },
+        {
+          "from": "rc-8",
+          "to": "rc-10",
+          "label": "Nein"
+        }
+      ]
+    },
+    {
+      "key": "internes-audit",
+      "title": "Internes Audit",
+      "swimlanes": [
+        {
+          "name": "QMB",
+          "boxes": [
+            {
+              "id": "ia-1",
+              "type": "action",
+              "text": "Auditprogramm\njährlich erstellen",
+              "x": 200,
+              "y": 30
+            },
+            {
+              "id": "ia-2",
+              "type": "document",
+              "text": "Prozesslandkarte",
+              "x": 70,
+              "y": 40
+            },
+            {
+              "id": "ia-3",
+              "type": "document",
+              "text": "Management-\nbewertung",
+              "x": 200,
+              "y": 130
+            },
+            {
+              "id": "ia-4",
+              "type": "action",
+              "text": "Info über\nAuditprogramm\nverteilen",
+              "x": 470,
+              "y": 30
+            }
+          ]
+        },
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "ia-5",
+              "type": "action",
+              "text": "Auditprogramm\nfreigeben",
+              "x": 200,
+              "y": 30
+            },
+            {
+              "id": "ia-6",
+              "type": "document",
+              "text": "Management-\nbewertung",
+              "x": 340,
+              "y": 40
+            },
+            {
+              "id": "ia-7",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 1120,
+              "y": 30
+            }
+          ]
+        },
+        {
+          "name": "Auditor",
+          "boxes": [
+            {
+              "id": "ia-8",
+              "type": "action",
+              "text": "Termin, Ablauf und\nInhalt mit dem\nVerantwortlichen\nabstimmen",
+              "x": 200,
+              "y": 30
+            },
+            {
+              "id": "ia-9",
+              "type": "document",
+              "text": "Auditberichte",
+              "x": 70,
+              "y": 40
+            },
+            {
+              "id": "ia-10",
+              "type": "document",
+              "text": "Management-\ndokumentation",
+              "x": 70,
+              "y": 140
+            },
+            {
+              "id": "ia-11",
+              "type": "action",
+              "text": "Einführungsgespräch\nmit dem\nVerantwortlichen",
+              "x": 400,
+              "y": 30
+            },
+            {
+              "id": "ia-12",
+              "type": "action",
+              "text": "Auditdurchführung\nvor Ort / remote",
+              "x": 570,
+              "y": 30
+            },
+            {
+              "id": "ia-13",
+              "type": "action",
+              "text": "Abschlussgespräch",
+              "x": 740,
+              "y": 30
+            },
+            {
+              "id": "ia-14",
+              "type": "action",
+              "text": "Bericht erstellen",
+              "x": 910,
+              "y": 30
+            },
+            {
+              "id": "ia-15",
+              "type": "document",
+              "text": "Auditbericht",
+              "x": 910,
+              "y": 130
+            },
+            {
+              "id": "ia-16",
+              "type": "action",
+              "text": "Ergebnisse an die GF\nweiterleiten",
+              "x": 1070,
+              "y": 30
+            },
+            {
+              "id": "ia-17",
+              "type": "document",
+              "text": "Auditbericht",
+              "x": 1220,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "name": "Verantwortliche",
+          "boxes": [
+            {
+              "id": "ia-18",
+              "type": "action",
+              "text": "Festlegung der Korrektur-\nund Verbesserungs-\nmaßnahmen",
+              "x": 740,
+              "y": 30
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "ia-2",
+          "to": "ia-1"
+        },
+        {
+          "from": "ia-1",
+          "to": "ia-3"
+        },
+        {
+          "from": "ia-1",
+          "to": "ia-5"
+        },
+        {
+          "from": "ia-5",
+          "to": "ia-6"
+        },
+        {
+          "from": "ia-5",
+          "to": "ia-4"
+        },
+        {
+          "from": "ia-9",
+          "to": "ia-8"
+        },
+        {
+          "from": "ia-10",
+          "to": "ia-8"
+        },
+        {
+          "from": "ia-8",
+          "to": "ia-11"
+        },
+        {
+          "from": "ia-11",
+          "to": "ia-12"
+        },
+        {
+          "from": "ia-12",
+          "to": "ia-13"
+        },
+        {
+          "from": "ia-13",
+          "to": "ia-18"
+        },
+        {
+          "from": "ia-13",
+          "to": "ia-14"
+        },
+        {
+          "from": "ia-14",
+          "to": "ia-15"
+        },
+        {
+          "from": "ia-14",
+          "to": "ia-16"
+        },
+        {
+          "from": "ia-16",
+          "to": "ia-17"
+        },
+        {
+          "from": "ia-16",
+          "to": "ia-7"
+        }
+      ]
+    },
+    {
+      "key": "massnahmen",
+      "title": "Maßnahmenabwicklung",
+      "swimlanes": [
+        {
+          "name": "Eingaben",
+          "boxes": [
+            {
+              "id": "ma-1",
+              "type": "document",
+              "text": "Ziele und\nProzesskennzahlen",
+              "x": 70,
+              "y": 30
+            },
+            {
+              "id": "ma-2",
+              "type": "document",
+              "text": "Auditberichte",
+              "x": 220,
+              "y": 30
+            },
+            {
+              "id": "ma-3",
+              "type": "document",
+              "text": "Risiken- und\nChancenanalyse",
+              "x": 370,
+              "y": 30
+            },
+            {
+              "id": "ma-4",
+              "type": "document",
+              "text": "Liste der Normen\nund Gesetze",
+              "x": 520,
+              "y": 30
+            },
+            {
+              "id": "ma-5",
+              "type": "document",
+              "text": "Lieferanten-\nbewertung",
+              "x": 670,
+              "y": 30
+            },
+            {
+              "id": "ma-6",
+              "type": "document",
+              "text": "Kunden-\nrückmeldungen",
+              "x": 820,
+              "y": 30
+            },
+            {
+              "id": "ma-7",
+              "type": "document",
+              "text": "Management-\nbewertung",
+              "x": 970,
+              "y": 30
+            }
+          ]
+        },
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "ma-8",
+              "type": "decision",
+              "text": "Maßnahme\nerforderlich?",
+              "x": 320,
+              "y": 30
+            },
+            {
+              "id": "ma-9",
+              "type": "start-end",
+              "text": "Management-\nbewertung",
+              "x": 520,
+              "y": 30
+            },
+            {
+              "id": "ma-10",
+              "type": "action",
+              "text": "Ursachenanalyse\ndurchführen",
+              "x": 320,
+              "y": 150
+            },
+            {
+              "id": "ma-11",
+              "type": "action",
+              "text": "Maßnahme definieren",
+              "x": 520,
+              "y": 150
+            },
+            {
+              "id": "ma-12",
+              "type": "action",
+              "text": "Verantwortliche /\nTermine definieren",
+              "x": 720,
+              "y": 150
+            },
+            {
+              "id": "ma-13",
+              "type": "document",
+              "text": "Maßnahmenplan",
+              "x": 520,
+              "y": 240
+            }
+          ]
+        },
+        {
+          "name": "Alle Bereiche",
+          "boxes": [
+            {
+              "id": "ma-14",
+              "type": "action",
+              "text": "Maßnahmen umsetzen",
+              "x": 720,
+              "y": 30
+            },
+            {
+              "id": "ma-15",
+              "type": "document",
+              "text": "Maßnahmenplan",
+              "x": 900,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "name": "QMB",
+          "boxes": [
+            {
+              "id": "ma-16",
+              "type": "action",
+              "text": "Umsetzung der\nMaßnahmen\nüberwachen",
+              "x": 720,
+              "y": 30
+            },
+            {
+              "id": "ma-17",
+              "type": "document",
+              "text": "Maßnahmenplan",
+              "x": 570,
+              "y": 40
+            },
+            {
+              "id": "ma-18",
+              "type": "decision",
+              "text": "Maßnahmen\nwirksam?",
+              "x": 920,
+              "y": 30
+            },
+            {
+              "id": "ma-19",
+              "type": "start-end",
+              "text": "Management-\nbewertung",
+              "x": 1120,
+              "y": 30
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "ma-1",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-2",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-3",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-4",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-5",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-6",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-7",
+          "to": "ma-8"
+        },
+        {
+          "from": "ma-8",
+          "to": "ma-9",
+          "label": "Nein"
+        },
+        {
+          "from": "ma-8",
+          "to": "ma-10",
+          "label": "Ja"
+        },
+        {
+          "from": "ma-10",
+          "to": "ma-11"
+        },
+        {
+          "from": "ma-11",
+          "to": "ma-12"
+        },
+        {
+          "from": "ma-11",
+          "to": "ma-13"
+        },
+        {
+          "from": "ma-12",
+          "to": "ma-14"
+        },
+        {
+          "from": "ma-14",
+          "to": "ma-15"
+        },
+        {
+          "from": "ma-14",
+          "to": "ma-16"
+        },
+        {
+          "from": "ma-16",
+          "to": "ma-17"
+        },
+        {
+          "from": "ma-16",
+          "to": "ma-18"
+        },
+        {
+          "from": "ma-18",
+          "to": "ma-10",
+          "label": "Nein"
+        },
+        {
+          "from": "ma-18",
+          "to": "ma-19",
+          "label": "Ja"
+        }
+      ]
+    },
+    {
+      "key": "schulungen",
+      "title": "Schulungen und Kompetenzen",
+      "swimlanes": [
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "sc-1",
+              "type": "action",
+              "text": "Schulungsbedarf\nmind. jährlich\nermitteln",
+              "x": 200,
+              "y": 30
+            },
+            {
+              "id": "sc-2",
+              "type": "document",
+              "text": "Schulungsplan",
+              "x": 70,
+              "y": 40
+            },
+            {
+              "id": "sc-3",
+              "type": "action",
+              "text": "Wirksamkeit prüfen\n& dokumentieren",
+              "x": 920,
+              "y": 30
+            },
+            {
+              "id": "sc-4",
+              "type": "document",
+              "text": "Schulungsplan",
+              "x": 1070,
+              "y": 40
+            }
+          ]
+        },
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "sc-5",
+              "type": "action",
+              "text": "Schulungen planen",
+              "x": 200,
+              "y": 30
+            },
+            {
+              "id": "sc-6",
+              "type": "document",
+              "text": "Schulungsplan",
+              "x": 70,
+              "y": 40
+            },
+            {
+              "id": "sc-7",
+              "type": "action",
+              "text": "Schulungen\nanmelden",
+              "x": 370,
+              "y": 30
+            },
+            {
+              "id": "sc-8",
+              "type": "action",
+              "text": "Schulungs-\nnachweise ablegen",
+              "x": 540,
+              "y": 30
+            },
+            {
+              "id": "sc-9",
+              "type": "document",
+              "text": "Zertifikat",
+              "x": 710,
+              "y": 30
+            },
+            {
+              "id": "sc-10",
+              "type": "document",
+              "text": "Teilnahme-\nbescheinigungen",
+              "x": 710,
+              "y": 130
+            }
+          ]
+        },
+        {
+          "name": "Mitarbeiter",
+          "boxes": [
+            {
+              "id": "sc-11",
+              "type": "action",
+              "text": "an Schulungen\nteilnehmen",
+              "x": 540,
+              "y": 30
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "sc-2",
+          "to": "sc-1"
+        },
+        {
+          "from": "sc-1",
+          "to": "sc-5"
+        },
+        {
+          "from": "sc-6",
+          "to": "sc-5"
+        },
+        {
+          "from": "sc-5",
+          "to": "sc-7"
+        },
+        {
+          "from": "sc-7",
+          "to": "sc-11"
+        },
+        {
+          "from": "sc-7",
+          "to": "sc-8"
+        },
+        {
+          "from": "sc-8",
+          "to": "sc-9"
+        },
+        {
+          "from": "sc-8",
+          "to": "sc-10"
+        },
+        {
+          "from": "sc-8",
+          "to": "sc-3"
+        },
+        {
+          "from": "sc-3",
+          "to": "sc-4"
+        }
+      ]
+    },
+    {
+      "key": "einkauf",
+      "title": "Einkauf und Wareneingang",
+      "swimlanes": [
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "ek-1",
+              "type": "action",
+              "text": "Bedarf vorhanden",
+              "x": 50,
+              "y": 30
+            },
+            {
+              "id": "ek-2",
+              "type": "decision",
+              "text": "Preis/Lieferant\nbekannt?",
+              "x": 50,
+              "y": 140
+            },
+            {
+              "id": "ek-3",
+              "type": "action",
+              "text": "Bei Bedarf\nRecherche\ndurchführen",
+              "x": 50,
+              "y": 250
+            },
+            {
+              "id": "ek-4",
+              "type": "action",
+              "text": "Lieferant auswählen",
+              "x": 220,
+              "y": 190
+            },
+            {
+              "id": "ek-5",
+              "type": "action",
+              "text": "Bestellen",
+              "x": 300,
+              "y": 90
+            },
+            {
+              "id": "ek-6",
+              "type": "document",
+              "text": "Bestellung",
+              "x": 300,
+              "y": 180
+            },
+            {
+              "id": "ek-7",
+              "type": "action",
+              "text": "Auftragsbestätigung\nprüfen",
+              "x": 500,
+              "y": 90
+            },
+            {
+              "id": "ek-8",
+              "type": "document",
+              "text": "Auftrags-\nbestätigung",
+              "x": 500,
+              "y": 180
+            },
+            {
+              "id": "ek-9",
+              "type": "decision",
+              "text": "i. O.?",
+              "x": 700,
+              "y": 100
+            },
+            {
+              "id": "ek-10",
+              "type": "action",
+              "text": "Rücksprache mit\nLieferant halten",
+              "x": 700,
+              "y": 210
+            },
+            {
+              "id": "ek-11",
+              "type": "action",
+              "text": "Ware annehmen",
+              "x": 900,
+              "y": 90
+            },
+            {
+              "id": "ek-12",
+              "type": "action",
+              "text": "Wareneingangs-\nprüfung\n(Sichtprüfung und\nrichtiges Produkt)",
+              "x": 1040,
+              "y": 90
+            },
+            {
+              "id": "ek-13",
+              "type": "decision",
+              "text": "i. O.?",
+              "x": 1200,
+              "y": 100
+            },
+            {
+              "id": "ek-14",
+              "type": "action",
+              "text": "Rücksprache mit\nLieferanten (z.B.\nRücklieferung)",
+              "x": 1200,
+              "y": 210
+            },
+            {
+              "id": "ek-15",
+              "type": "action",
+              "text": "Ware verwenden\noder weiterleiten",
+              "x": 1200,
+              "y": 310
+            }
+          ]
+        },
+        {
+          "name": "Lieferant",
+          "boxes": [
+            {
+              "id": "ek-16",
+              "type": "action",
+              "text": "Angebot erstellen",
+              "x": 120,
+              "y": 30
+            },
+            {
+              "id": "ek-17",
+              "type": "document",
+              "text": "Angebot",
+              "x": 120,
+              "y": 130
+            },
+            {
+              "id": "ek-18",
+              "type": "action",
+              "text": "Auftrags-\nbestätigung\nerstellen",
+              "x": 300,
+              "y": 30
+            },
+            {
+              "id": "ek-19",
+              "type": "document",
+              "text": "Auftrags-\nbestätigung",
+              "x": 440,
+              "y": 40
+            },
+            {
+              "id": "ek-20",
+              "type": "action",
+              "text": "Auslieferung",
+              "x": 700,
+              "y": 30
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "ek-1",
+          "to": "ek-2"
+        },
+        {
+          "from": "ek-2",
+          "to": "ek-3",
+          "label": "Nein"
+        },
+        {
+          "from": "ek-2",
+          "to": "ek-5",
+          "label": "Ja"
+        },
+        {
+          "from": "ek-3",
+          "to": "ek-16"
+        },
+        {
+          "from": "ek-16",
+          "to": "ek-17"
+        },
+        {
+          "from": "ek-4",
+          "to": "ek-5"
+        },
+        {
+          "from": "ek-5",
+          "to": "ek-6"
+        },
+        {
+          "from": "ek-5",
+          "to": "ek-18"
+        },
+        {
+          "from": "ek-18",
+          "to": "ek-19"
+        },
+        {
+          "from": "ek-19",
+          "to": "ek-7"
+        },
+        {
+          "from": "ek-7",
+          "to": "ek-8"
+        },
+        {
+          "from": "ek-7",
+          "to": "ek-9"
+        },
+        {
+          "from": "ek-9",
+          "to": "ek-10",
+          "label": "Nein"
+        },
+        {
+          "from": "ek-9",
+          "to": "ek-11",
+          "label": "Ja"
+        },
+        {
+          "from": "ek-10",
+          "to": "ek-7"
+        },
+        {
+          "from": "ek-20",
+          "to": "ek-11"
+        },
+        {
+          "from": "ek-11",
+          "to": "ek-12"
+        },
+        {
+          "from": "ek-12",
+          "to": "ek-13"
+        },
+        {
+          "from": "ek-13",
+          "to": "ek-14",
+          "label": "Nein"
+        },
+        {
+          "from": "ek-13",
+          "to": "ek-15",
+          "label": "Ja"
+        }
+      ]
+    },
+    {
+      "key": "wareneingang",
+      "title": "Wareneingang",
+      "swimlanes": [
+        {
+          "name": "Vertriebscontrolling, Logistik",
+          "boxes": [
+            {
+              "id": "we-1",
+              "type": "start-end",
+              "text": "Einkauf",
+              "x": 70,
+              "y": 70
+            },
+            {
+              "id": "we-2",
+              "type": "action",
+              "text": "Ware annehmen",
+              "x": 220,
+              "y": 60
+            },
+            {
+              "id": "we-3",
+              "type": "action",
+              "text": "Wareneingangs-\nprüfung",
+              "x": 390,
+              "y": 60
+            },
+            {
+              "id": "we-4",
+              "type": "document",
+              "text": "Sichtprüfung",
+              "x": 390,
+              "y": 150
+            },
+            {
+              "id": "we-5",
+              "type": "decision",
+              "text": "i. O.?",
+              "x": 570,
+              "y": 70
+            },
+            {
+              "id": "we-6",
+              "type": "action",
+              "text": "Rücksprache mit\nLieferant",
+              "x": 760,
+              "y": 60
+            },
+            {
+              "id": "we-7",
+              "type": "action",
+              "text": "Lieferschein ablegen",
+              "x": 970,
+              "y": 60
+            },
+            {
+              "id": "we-8",
+              "type": "document",
+              "text": "Lieferschein",
+              "x": 970,
+              "y": 150
+            }
+          ]
+        },
+        {
+          "name": "QS",
+          "boxes": [
+            {
+              "id": "we-9",
+              "type": "software",
+              "text": "Kundenanfragetool",
+              "x": 120,
+              "y": 60
+            },
+            {
+              "id": "we-10",
+              "type": "action",
+              "text": "Prüfung",
+              "x": 570,
+              "y": 60
+            },
+            {
+              "id": "we-11",
+              "type": "document",
+              "text": "Lieferschein",
+              "x": 400,
+              "y": 70
+            },
+            {
+              "id": "we-12",
+              "type": "document",
+              "text": "Beschaffenheit;\nAbmessungen",
+              "x": 400,
+              "y": 160
+            },
+            {
+              "id": "we-13",
+              "type": "decision",
+              "text": "i. O.?",
+              "x": 760,
+              "y": 70
+            },
+            {
+              "id": "we-14",
+              "type": "action",
+              "text": "Lieferschein mit\nKürzel\nunterschreiben",
+              "x": 950,
+              "y": 60
+            },
+            {
+              "id": "we-15",
+              "type": "document",
+              "text": "Lieferschein",
+              "x": 950,
+              "y": 150
+            },
+            {
+              "id": "we-16",
+              "type": "start-end",
+              "text": "Produktion",
+              "x": 1120,
+              "y": 70
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "we-1",
+          "to": "we-2"
+        },
+        {
+          "from": "we-2",
+          "to": "we-3"
+        },
+        {
+          "from": "we-3",
+          "to": "we-4"
+        },
+        {
+          "from": "we-3",
+          "to": "we-5"
+        },
+        {
+          "from": "we-5",
+          "to": "we-6",
+          "label": "Nein"
+        },
+        {
+          "from": "we-5",
+          "to": "we-10",
+          "label": "Ja"
+        },
+        {
+          "from": "we-6",
+          "to": "we-7"
+        },
+        {
+          "from": "we-7",
+          "to": "we-8"
+        },
+        {
+          "from": "we-10",
+          "to": "we-11"
+        },
+        {
+          "from": "we-10",
+          "to": "we-12"
+        },
+        {
+          "from": "we-10",
+          "to": "we-13"
+        },
+        {
+          "from": "we-13",
+          "to": "we-6",
+          "label": "Nein"
+        },
+        {
+          "from": "we-13",
+          "to": "we-14",
+          "label": "Ja"
+        },
+        {
+          "from": "we-14",
+          "to": "we-15"
+        },
+        {
+          "from": "we-14",
+          "to": "we-16"
+        }
+      ]
+    },
+    {
+      "key": "kundenzufriedenheit",
+      "title": "Kundenzufriedenheit",
+      "swimlanes": [
+        {
+          "name": "Vertrieb",
+          "boxes": [
+            {
+              "id": "kz-1",
+              "type": "action",
+              "text": "Kundenzufriedenheit\nermitteln",
+              "x": 120,
+              "y": 50
+            },
+            {
+              "id": "kz-2",
+              "type": "document",
+              "text": "Mindestens 1 x\njährlich",
+              "x": 120,
+              "y": 140
+            },
+            {
+              "id": "kz-3",
+              "type": "document",
+              "text": "z.B. Mailing\nFragebogen,\nEigenbewertung",
+              "x": 270,
+              "y": 140
+            }
+          ]
+        },
+        {
+          "name": "QMB",
+          "boxes": [
+            {
+              "id": "kz-4",
+              "type": "action",
+              "text": "Auswertung und ggf.\nMaßnahmen\nvorschlagen",
+              "x": 370,
+              "y": 50
+            }
+          ]
+        },
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "kz-5",
+              "type": "action",
+              "text": "Bewertung und\nMaßnahmen\nfestlegen",
+              "x": 570,
+              "y": 50
+            },
+            {
+              "id": "kz-6",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 770,
+              "y": 60
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "kz-1",
+          "to": "kz-2"
+        },
+        {
+          "from": "kz-1",
+          "to": "kz-3"
+        },
+        {
+          "from": "kz-1",
+          "to": "kz-4"
+        },
+        {
+          "from": "kz-4",
+          "to": "kz-5"
+        },
+        {
+          "from": "kz-5",
+          "to": "kz-6"
+        }
+      ]
+    },
+    {
+      "key": "reklamationen",
+      "title": "Kundenreklamationen",
+      "swimlanes": [
+        {
+          "name": "Kunde",
+          "boxes": [
+            {
+              "id": "kr-1",
+              "type": "action",
+              "text": "Reklamation tätigen",
+              "x": 120,
+              "y": 50
+            },
+            {
+              "id": "kr-2",
+              "type": "document",
+              "text": "Reklamation",
+              "x": 120,
+              "y": 140
+            }
+          ]
+        },
+        {
+          "name": "Geschäftsführer",
+          "boxes": [
+            {
+              "id": "kr-3",
+              "type": "action",
+              "text": "Erfassen der\nReklamation",
+              "x": 120,
+              "y": 50
+            },
+            {
+              "id": "kr-4",
+              "type": "action",
+              "text": "Ursachenanalyse\nin Zusammenarbeit\nmit Mitarbeitern",
+              "x": 320,
+              "y": 50
+            },
+            {
+              "id": "kr-5",
+              "type": "action",
+              "text": "Maßnahmen für aktuelle\nReklamation festlegen z.B.\nNachbesserung",
+              "x": 560,
+              "y": 50
+            },
+            {
+              "id": "kr-6",
+              "type": "action",
+              "text": "Kunde informieren",
+              "x": 800,
+              "y": 50
+            },
+            {
+              "id": "kr-7",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 1000,
+              "y": 60
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "kr-1",
+          "to": "kr-2"
+        },
+        {
+          "from": "kr-1",
+          "to": "kr-3"
+        },
+        {
+          "from": "kr-3",
+          "to": "kr-4"
+        },
+        {
+          "from": "kr-4",
+          "to": "kr-5"
+        },
+        {
+          "from": "kr-5",
+          "to": "kr-6"
+        },
+        {
+          "from": "kr-6",
+          "to": "kr-7"
+        }
+      ]
+    },
+    {
+      "key": "lieferanten",
+      "title": "Lieferantenbewertung",
+      "swimlanes": [
+        {
+          "name": "Geschäftsführung",
+          "boxes": [
+            {
+              "id": "li-1",
+              "type": "action",
+              "text": "Hauptlieferanten\ndefinieren",
+              "x": 100,
+              "y": 50
+            },
+            {
+              "id": "li-2",
+              "type": "action",
+              "text": "Bewertungskriterien\nfestlegen",
+              "x": 280,
+              "y": 50
+            },
+            {
+              "id": "li-3",
+              "type": "action",
+              "text": "Lieferantenbewertung\ndurchführen (jährlich)",
+              "x": 480,
+              "y": 50
+            },
+            {
+              "id": "li-4",
+              "type": "document",
+              "text": "Lieferanten-\nbewertung",
+              "x": 480,
+              "y": 140
+            },
+            {
+              "id": "li-5",
+              "type": "decision",
+              "text": "Maßnahme\nerforderlich?",
+              "x": 700,
+              "y": 60
+            },
+            {
+              "id": "li-6",
+              "type": "start-end",
+              "text": "Maßnahmen-\nabwicklung",
+              "x": 900,
+              "y": 60
+            },
+            {
+              "id": "li-7",
+              "type": "action",
+              "text": "Ergebnisse\ndokumentieren",
+              "x": 700,
+              "y": 170
+            },
+            {
+              "id": "li-8",
+              "type": "document",
+              "text": "Management-\nbewertung",
+              "x": 700,
+              "y": 260
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "li-1",
+          "to": "li-2"
+        },
+        {
+          "from": "li-2",
+          "to": "li-3"
+        },
+        {
+          "from": "li-3",
+          "to": "li-4"
+        },
+        {
+          "from": "li-3",
+          "to": "li-5"
+        },
+        {
+          "from": "li-5",
+          "to": "li-6",
+          "label": "Ja"
+        },
+        {
+          "from": "li-5",
+          "to": "li-7",
+          "label": "Nein"
+        },
+        {
+          "from": "li-7",
+          "to": "li-8"
+        }
+      ]
+    },
+    {
+      "key": "wartung",
+      "title": "Wartung der Maschinen",
+      "swimlanes": [
+        {
+          "name": "Wartungsbeauftragter",
+          "boxes": [
+            {
+              "id": "wa-1",
+              "type": "action",
+              "text": "Wartungstermine\nplanen",
+              "x": 100,
+              "y": 50
+            },
+            {
+              "id": "wa-2",
+              "type": "document",
+              "text": "Wartungen werden\nnach Empfehlungen\nder Hersteller\nBetriebsanleitungen\ndurchgeführt",
+              "x": 100,
+              "y": 140
+            },
+            {
+              "id": "wa-3",
+              "type": "decision",
+              "text": "Interne\nWartung?",
+              "x": 300,
+              "y": 60
+            },
+            {
+              "id": "wa-4",
+              "type": "action",
+              "text": "Wartung\ndurchführen",
+              "x": 470,
+              "y": 50
+            },
+            {
+              "id": "wa-5",
+              "type": "action",
+              "text": "Wartungen\nbeauftragen",
+              "x": 300,
+              "y": 160
+            },
+            {
+              "id": "wa-6",
+              "type": "decision",
+              "text": "i. O.?",
+              "x": 670,
+              "y": 60
+            },
+            {
+              "id": "wa-7",
+              "type": "action",
+              "text": "Nächstes\nWartungsintervall",
+              "x": 870,
+              "y": 50
+            },
+            {
+              "id": "wa-8",
+              "type": "action",
+              "text": "Reparatur oder\nverschrotten",
+              "x": 670,
+              "y": 160
+            }
+          ]
+        },
+        {
+          "name": "Dienstleister",
+          "boxes": [
+            {
+              "id": "wa-9",
+              "type": "action",
+              "text": "Wartungen durchführen\nund protokollieren",
+              "x": 300,
+              "y": 50
+            },
+            {
+              "id": "wa-10",
+              "type": "document",
+              "text": "Wartungsprotokoll",
+              "x": 300,
+              "y": 140
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "wa-1",
+          "to": "wa-2"
+        },
+        {
+          "from": "wa-1",
+          "to": "wa-3"
+        },
+        {
+          "from": "wa-3",
+          "to": "wa-4",
+          "label": "Ja"
+        },
+        {
+          "from": "wa-3",
+          "to": "wa-5",
+          "label": "Nein"
+        },
+        {
+          "from": "wa-5",
+          "to": "wa-9"
+        },
+        {
+          "from": "wa-9",
+          "to": "wa-10"
+        },
+        {
+          "from": "wa-4",
+          "to": "wa-6"
+        },
+        {
+          "from": "wa-9",
+          "to": "wa-6"
+        },
+        {
+          "from": "wa-6",
+          "to": "wa-7",
+          "label": "Ja"
+        },
+        {
+          "from": "wa-6",
+          "to": "wa-8",
+          "label": "Nein"
+        }
+      ]
+    },
+    {
+      "key": "pruefmittel",
+      "title": "Prüfmittelüberwachung",
+      "swimlanes": [
+        {
+          "name": "Prüfmittelbeauftragter",
+          "boxes": [
+            {
+              "id": "pm-1",
+              "type": "action",
+              "text": "Erfassung der\nPrüfmittel",
+              "x": 100,
+              "y": 50
+            },
+            {
+              "id": "pm-2",
+              "type": "document",
+              "text": "Inventar- und\nPrüfmittelliste",
+              "x": 100,
+              "y": 140
+            },
+            {
+              "id": "pm-3",
+              "type": "decision",
+              "text": "Kalibrierung\nerforderlich?",
+              "x": 300,
+              "y": 60
+            },
+            {
+              "id": "pm-4",
+              "type": "action",
+              "text": "Nicht für\nqualitätsrelevante\nMessungen\nverwenden",
+              "x": 500,
+              "y": 50
+            },
+            {
+              "id": "pm-5",
+              "type": "action",
+              "text": "Nächsten\nKalibriertermin\neintragen /\naktualisieren",
+              "x": 700,
+              "y": 50
+            },
+            {
+              "id": "pm-6",
+              "type": "document",
+              "text": "Inventar- und\nPrüfmittelliste",
+              "x": 700,
+              "y": 140
+            }
+          ]
+        },
+        {
+          "name": "Zuständiger",
+          "boxes": [
+            {
+              "id": "pm-7",
+              "type": "action",
+              "text": "Intern/extern\nkalibrieren",
+              "x": 300,
+              "y": 50
+            },
+            {
+              "id": "pm-8",
+              "type": "decision",
+              "text": "Kalibrierung\ni. O.?",
+              "x": 500,
+              "y": 60
+            },
+            {
+              "id": "pm-9",
+              "type": "action",
+              "text": "Reparatur oder\nverschrotten. Bei\nBedarf als \"rot\"\nkennzeichnen",
+              "x": 700,
+              "y": 50
+            },
+            {
+              "id": "pm-10",
+              "type": "action",
+              "text": "Risiko ermitteln und\nbei Bedarf\nMaßnahmen\neinleiten",
+              "x": 700,
+              "y": 160
+            },
+            {
+              "id": "pm-11",
+              "type": "document",
+              "text": "Inventar- und\nPrüfmittelliste",
+              "x": 870,
+              "y": 60
+            },
+            {
+              "id": "pm-12",
+              "type": "document",
+              "text": "z.B. Rückruf,\nPrüfungen\nwiederholen",
+              "x": 870,
+              "y": 160
+            }
+          ]
+        }
+      ],
+      "connections": [
+        {
+          "from": "pm-1",
+          "to": "pm-2"
+        },
+        {
+          "from": "pm-1",
+          "to": "pm-3"
+        },
+        {
+          "from": "pm-3",
+          "to": "pm-4",
+          "label": "Nein"
+        },
+        {
+          "from": "pm-3",
+          "to": "pm-7",
+          "label": "Ja"
+        },
+        {
+          "from": "pm-7",
+          "to": "pm-8"
+        },
+        {
+          "from": "pm-8",
+          "to": "pm-9",
+          "label": "Nein"
+        },
+        {
+          "from": "pm-8",
+          "to": "pm-5",
+          "label": "Ja"
+        },
+        {
+          "from": "pm-9",
+          "to": "pm-10"
+        },
+        {
+          "from": "pm-9",
+          "to": "pm-11"
+        },
+        {
+          "from": "pm-10",
+          "to": "pm-12"
+        },
+        {
+          "from": "pm-5",
+          "to": "pm-6"
+        }
+      ]
+    }
+  ]
+}

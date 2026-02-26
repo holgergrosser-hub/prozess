@@ -1,22 +1,32 @@
 // Editor Hauptlogik
 let currentProcess = null;
 let currentProcessKey = null;
+let processCatalog = {};
 let connectionMode = false;
 let connectionStart = null;
 let draggedElement = null;
 let masterConfig = {};
 
 // Init
-function init() {
+async function init() {
     const urlParams = new URLSearchParams(window.location.search);
     currentProcessKey = urlParams.get('process');
     
     loadMasterConfig();
+
+    await loadProcessCatalog();
+
+    // Draft aus localStorage bevorzugen (pro Gerät), solange nicht veröffentlicht
+    const saved = currentProcessKey && currentProcessKey !== 'new'
+        ? localStorage.getItem(`process_${currentProcessKey}`)
+        : null;
     
     if (currentProcessKey === 'new') {
         currentProcess = JSON.parse(JSON.stringify(EMPTY_PROCESS));
-    } else if (PROCESS_DATA[currentProcessKey]) {
-        currentProcess = JSON.parse(JSON.stringify(PROCESS_DATA[currentProcessKey]));
+    } else if (saved) {
+        currentProcess = JSON.parse(saved);
+    } else if (processCatalog[currentProcessKey]) {
+        currentProcess = JSON.parse(JSON.stringify(processCatalog[currentProcessKey]));
     } else {
         window.location.href = 'index.html';
         return;
@@ -24,6 +34,32 @@ function init() {
     
     renderProcess();
     attachEventListeners();
+}
+
+async function loadProcessCatalog() {
+    // Primär: JSON-Datei (zentral versionierbar/publishbar)
+    try {
+        const res = await fetch('data/processes.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const processes = Array.isArray(json?.processes) ? json.processes : [];
+        processCatalog = {};
+        for (const proc of processes) {
+            if (proc && typeof proc.key === 'string' && proc.key.trim()) {
+                const { key, ...rest } = proc;
+                processCatalog[key] = rest;
+            }
+        }
+        return;
+    } catch (err) {
+        // Fallback: alte Daten aus process-data.js
+        if (typeof PROCESS_DATA === 'object' && PROCESS_DATA) {
+            processCatalog = PROCESS_DATA;
+            return;
+        }
+        console.error('Konnte Prozesskatalog nicht laden:', err);
+        processCatalog = {};
+    }
 }
 
 function loadMasterConfig() {
@@ -324,38 +360,121 @@ function toggleConnectionMode() {
     }
 }
 
-function saveProcess() {
+function syncProcessFromDOM() {
     // Titel aktualisieren
     const titleEl = document.querySelector('.process-title');
     if (titleEl) {
         currentProcess.title = titleEl.textContent;
     }
-    
+
     // Swimlane-Namen aktualisieren
     document.querySelectorAll('.swimlane-label').forEach((label, idx) => {
         if (currentProcess.swimlanes[idx]) {
             currentProcess.swimlanes[idx].name = label.textContent.replace('×', '').trim();
         }
     });
-    
-    // Box-Texte aktualisieren
-    document.querySelectorAll('.process-box').forEach(box => {
-        const span = box.querySelector('span');
+
+    // Box-Texte + Positionen aktualisieren
+    document.querySelectorAll('.process-box').forEach(boxEl => {
+        const span = boxEl.querySelector('span');
+        const laneIdx = parseInt(boxEl.parentElement?.dataset?.lane);
+        if (!Number.isFinite(laneIdx) || !currentProcess.swimlanes[laneIdx]) return;
+
+        const boxData = currentProcess.swimlanes[laneIdx].boxes.find(b => b.id === boxEl.id);
+        if (!boxData) return;
+
         if (span) {
-            const text = span.innerHTML.replace(/<br>/g, '\n');
-            const laneIdx = parseInt(box.parentElement.dataset.lane);
-            const boxData = currentProcess.swimlanes[laneIdx].boxes.find(b => b.id === box.id);
-            if (boxData) {
-                boxData.text = text;
-            }
+            boxData.text = span.innerHTML.replace(/<br>/g, '\n');
         }
+        boxData.x = parseInt(boxEl.style.left) || 0;
+        boxData.y = parseInt(boxEl.style.top) || 0;
     });
+}
+
+function saveProcess() {
+    syncProcessFromDOM();
     
     // In localStorage speichern
     const key = `process_${currentProcessKey}`;
     localStorage.setItem(key, JSON.stringify(currentProcess));
     
     alert('Prozess gespeichert!');
+}
+
+async function publishProcess() {
+    syncProcessFromDOM();
+
+    if (!window.netlifyIdentity) {
+        alert('Netlify Identity ist nicht verfügbar. Auf Netlify deployen oder Identity aktivieren.');
+        return;
+    }
+
+    const user = netlifyIdentity.currentUser();
+    if (!user) {
+        const openLogin = confirm('Zum Veröffentlichen bitte zuerst anmelden. Login jetzt öffnen?');
+        if (openLogin) netlifyIdentity.open();
+        return;
+    }
+
+    let publishKey = currentProcessKey;
+    if (!publishKey || publishKey === 'new') {
+        publishKey = prompt('Neuer Prozess-Key (z.B. "wareneingang-2"):');
+        if (!publishKey) return;
+        publishKey = publishKey.trim();
+        if (!/^[a-z0-9\-]{3,64}$/.test(publishKey)) {
+            alert('Ungültiger Key. Erlaubt: Kleinbuchstaben, Zahlen, Bindestrich (3-64 Zeichen).');
+            return;
+        }
+    }
+
+    let token;
+    try {
+        token = await user.jwt();
+    } catch (e) {
+        console.error(e);
+        alert('Konnte Login-Token nicht lesen. Bitte neu anmelden.');
+        return;
+    }
+
+    try {
+        const res = await fetch('/.netlify/functions/publish-process', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                processKey: publishKey,
+                process: currentProcess
+            })
+        });
+
+        const bodyText = await res.text();
+        if (!res.ok) {
+            console.error('Publish failed:', res.status, bodyText);
+            alert(`Veröffentlichen fehlgeschlagen (${res.status}).\n${bodyText}`);
+            return;
+        }
+
+        // Nach erfolgreichem Publish: lokalen Draft entfernen (sonst lädt das Gerät beim Refresh evtl. alte Entwürfe)
+        try {
+            localStorage.removeItem(`process_${currentProcessKey}`);
+        } catch {
+            // ignore
+        }
+
+        // Bei neuen Prozessen: Key übernehmen (für Dokument-ID und weitere Saves)
+        if (currentProcessKey === 'new') {
+            currentProcessKey = publishKey;
+            renderProcess();
+            attachEventListeners();
+        }
+
+        alert('Prozess wurde veröffentlicht.');
+    } catch (err) {
+        console.error(err);
+        alert('Veröffentlichen fehlgeschlagen (Netzwerk/Server).');
+    }
 }
 
 function exportHTML() {

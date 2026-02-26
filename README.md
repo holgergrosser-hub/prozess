@@ -141,8 +141,14 @@ prozess-editor-netlify/
 ├── index.html          # Startseite mit Master-Config
 ├── editor.html         # Editor-Seite
 ├── styles.css          # Alle Styles
-├── process-data.js     # Alle 12 Prozesse
+├── data/
+│   ├── processes.json   # Alle Prozesse (zentral, versionierbar)
+│   └── empty-process.json # Template für neue Prozesse
+├── process-data.js     # Fallback-Daten + EMPTY_PROCESS (für Offline/File-Mode)
 ├── editor.js           # Editor-Logik
+├── netlify/
+│   └── functions/
+│       └── publish-process.js # "Veröffentlichen" → Commit ins Repo
 ├── netlify.toml        # Netlify-Konfiguration
 └── README.md           # Diese Datei
 ```
@@ -150,9 +156,22 @@ prozess-editor-netlify/
 ## 💾 Datenspeicherung
 
 - **Master-Config:** Im Browser localStorage
-- **Prozess-Änderungen:** Im Browser localStorage
+- **Prozess-Änderungen (Entwurf):** Im Browser localStorage (pro Gerät)
+- **Prozess-Änderungen (zentral):** Button "🌍 Veröffentlichen" → Commit nach `data/processes.json` (GitHub) → Netlify deployt neu
 - **Jeder Nutzer:** Hat seine eigenen Einstellungen
 - **Export:** Als eigenständige HTML-Datei
+
+### Netlify (für "Veröffentlichen")
+
+In Netlify → Site settings → Environment variables:
+
+- `GITHUB_OWNER` (z.B. `holgergrosser-hub`)
+- `GITHUB_REPO` (z.B. `prozess`)
+- `GITHUB_BRANCH` (optional, Default `main`)
+- `GITHUB_DATA_PATH` (optional, Default `data/processes.json`)
+- `GITHUB_TOKEN` (Fine-grained PAT mit **Contents: Read/Write** nur für dieses Repo)
+
+Außerdem: Netlify → Identity aktivieren (Kunden-Login).
 
 ## 🌐 Nach dem Deployment
 
@@ -200,7 +219,7 @@ Bei Fragen einfach melden!
 
 ## 🔐 Datenschutz
 
-- Alle Daten bleiben im Browser (localStorage)
-- Keine Server-Speicherung
+- Entwürfe bleiben im Browser (localStorage)
+- Beim „🌍 Veröffentlichen“ werden Prozessdaten zentral im GitHub-Repo als JSON gespeichert (Commit) und über Netlify ausgeliefert
 - Kein Tracking
 - HTTPS durch Netlify

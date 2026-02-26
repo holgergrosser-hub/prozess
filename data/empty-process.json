@@ -1,0 +1,10 @@
+{
+  "title": "Neuer Prozess",
+  "swimlanes": [
+    {
+      "name": "Bereich 1",
+      "boxes": []
+    }
+  ],
+  "connections": []
+}
