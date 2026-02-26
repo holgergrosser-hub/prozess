@@ -31,6 +31,27 @@ function encodeGitHubPath(path) {
         .join('/');
 }
 
+function normalizeCategory(value) {
+    if (value == null) return '';
+    const raw = String(value).trim().toLowerCase();
+    if (!raw) return '';
+    if (raw === 'fuehrung' || raw === 'wertschoepfung' || raw === 'unterstuetzung') return raw;
+    if (raw === '1') return 'fuehrung';
+    if (raw === '2') return 'wertschoepfung';
+    if (raw === '3') return 'unterstuetzung';
+
+    const s = raw
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss');
+
+    if (s.includes('fuehr')) return 'fuehrung';
+    if (s.includes('wert') || s.includes('schoepf')) return 'wertschoepfung';
+    if (s.includes('unter') || s.includes('stuetz')) return 'unterstuetzung';
+    return '';
+}
+
 async function githubRequest(url, { method = 'GET', token, body } = {}) {
     const headers = {
         'Accept': 'application/vnd.github+json',
@@ -122,8 +143,10 @@ exports.handler = async function handler(event, context) {
 
         const processes = fileJson.processes;
         const idx = processes.findIndex(p => p && p.key === processKey);
+        const category = normalizeCategory(process.category) || 'unterstuetzung';
         const nextProc = {
             key: processKey,
+            category,
             title: process.title || 'Neuer Prozess',
             swimlanes: Array.isArray(process.swimlanes) ? process.swimlanes : [],
             connections: Array.isArray(process.connections) ? process.connections : []

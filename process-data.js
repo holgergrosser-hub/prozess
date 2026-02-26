@@ -3,6 +3,7 @@
 // (Diese Datei bleibt als kleines Fallback/Template bestehen.)
 
 const EMPTY_PROCESS = {
+    category: 'unterstuetzung',
     title: 'Neuer Prozess',
     swimlanes: [
         {

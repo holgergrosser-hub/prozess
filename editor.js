@@ -584,6 +584,23 @@ async function publishProcess() {
         }
     }
 
+    // Kategorie sicherstellen (wird auf der Startseite für die Zuordnung verwendet)
+    const normalizedCategory = normalizeProcessCategory(currentProcess?.category);
+    if (!normalizedCategory) {
+        const input = prompt(
+            'Kategorie wählen:\n1 = Führungsprozesse\n2 = Wertschöpfungsprozesse\n3 = Unterstützungsprozesse',
+            '3'
+        );
+        const picked = normalizeProcessCategory(input);
+        if (!picked) {
+            alert('Ungültige Kategorie. Bitte 1, 2 oder 3 eingeben.');
+            return;
+        }
+        currentProcess.category = picked;
+    } else {
+        currentProcess.category = normalizedCategory;
+    }
+
     let token;
     try {
         token = await user.jwt();
@@ -632,6 +649,28 @@ async function publishProcess() {
         console.error(err);
         alert('Veröffentlichen fehlgeschlagen (Netzwerk/Server).');
     }
+}
+
+function normalizeProcessCategory(value) {
+    if (value == null) return '';
+    const raw = String(value).trim().toLowerCase();
+    if (!raw) return '';
+    if (raw === '1') return 'fuehrung';
+    if (raw === '2') return 'wertschoepfung';
+    if (raw === '3') return 'unterstuetzung';
+
+    // Normalize german umlauts for simple matching
+    const s = raw
+        .replace(/ä/g, 'ae')
+        .replace(/ö/g, 'oe')
+        .replace(/ü/g, 'ue')
+        .replace(/ß/g, 'ss');
+
+    if (s.includes('fuehr') || s.includes('fuehrung') || s.includes('fuehrungs')) return 'fuehrung';
+    if (s.includes('wert') || s.includes('schoepf') || s.includes('wertschoep')) return 'wertschoepfung';
+    if (s.includes('unter') || s.includes('stuetz') || s.includes('unterstuetz')) return 'unterstuetzung';
+    if (s === 'fuehrung' || s === 'wertschoepfung' || s === 'unterstuetzung') return s;
+    return '';
 }
 
 function exportHTML() {

@@ -341,7 +341,7 @@
             
             <!-- Prozessliste -->
             <h2 class="category-title">📊 Führungsprozesse</h2>
-            <div class="process-grid">
+            <div class="process-grid" id="processGridFuehrung">
                 <div class="process-card" onclick="openProcess('managementbewertung')">
                     <h3>Managementbewertung</h3>
                     <p>Jährliche Bewertung des QM-Systems durch die Geschäftsführung</p>
@@ -369,7 +369,7 @@
             </div>
             
             <h2 class="category-title">🏭 Wertschöpfungsprozesse</h2>
-            <div class="process-grid">
+            <div class="process-grid" id="processGridWertschoepfung">
                 <div class="process-card" onclick="openProcess('einkauf')">
                     <h3>Einkauf und Wareneingang</h3>
                     <p>Beschaffungsprozess von der Anfrage bis zur Warenannahme</p>
@@ -382,7 +382,7 @@
             </div>
             
             <h2 class="category-title">🛠️ Unterstützungsprozesse</h2>
-            <div class="process-grid">
+            <div class="process-grid" id="processGridUnterstuetzung">
                 <div class="process-card" onclick="openProcess('kundenzufriedenheit')">
                     <h3>Kundenzufriedenheit</h3>
                     <p>Ermittlung und Bewertung der Kundenzufriedenheit</p>
@@ -452,8 +452,89 @@
         function openProcess(processName) {
             window.location.href = `editor.html?process=${processName}`;
         }
+
+        function normalizeCategory(value) {
+            if (value == null) return 'unterstuetzung';
+            const raw = String(value).trim().toLowerCase();
+            if (raw === 'fuehrung' || raw === 'wertschoepfung' || raw === 'unterstuetzung') return raw;
+            if (raw === '1') return 'fuehrung';
+            if (raw === '2') return 'wertschoepfung';
+            if (raw === '3') return 'unterstuetzung';
+            const s = raw
+                .replace(/ä/g, 'ae')
+                .replace(/ö/g, 'oe')
+                .replace(/ü/g, 'ue')
+                .replace(/ß/g, 'ss');
+            if (s.includes('fuehr')) return 'fuehrung';
+            if (s.includes('wert') || s.includes('schoepf')) return 'wertschoepfung';
+            if (s.includes('unter') || s.includes('stuetz')) return 'unterstuetzung';
+            return 'unterstuetzung';
+        }
+
+        function renderProcessGrid(gridEl, processes) {
+            if (!gridEl) return;
+            gridEl.innerHTML = '';
+
+            const sorted = [...processes].sort((a, b) => {
+                const ta = String(a?.title || a?.key || '').toLowerCase();
+                const tb = String(b?.title || b?.key || '').toLowerCase();
+                return ta.localeCompare(tb, 'de');
+            });
+
+            for (const p of sorted) {
+                if (!p || typeof p.key !== 'string') continue;
+                const key = p.key;
+                const title = p.title || key;
+                const desc = p.description || '';
+
+                const card = document.createElement('div');
+                card.className = 'process-card';
+                card.onclick = () => openProcess(key);
+
+                const h3 = document.createElement('h3');
+                h3.textContent = title;
+                card.appendChild(h3);
+
+                const pEl = document.createElement('p');
+                pEl.textContent = desc;
+                card.appendChild(pEl);
+
+                gridEl.appendChild(card);
+            }
+        }
+
+        async function loadProcessCatalog() {
+            try {
+                const res = await fetch('data/processes.json', { cache: 'no-store' });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const json = await res.json();
+                const processes = Array.isArray(json?.processes) ? json.processes : [];
+
+                const fuehrung = [];
+                const wertschoepfung = [];
+                const unterstuetzung = [];
+
+                for (const proc of processes) {
+                    if (!proc || typeof proc.key !== 'string') continue;
+                    const cat = normalizeCategory(proc.category);
+                    if (cat === 'fuehrung') fuehrung.push(proc);
+                    else if (cat === 'wertschoepfung') wertschoepfung.push(proc);
+                    else unterstuetzung.push(proc);
+                }
+
+                renderProcessGrid(document.getElementById('processGridFuehrung'), fuehrung);
+                renderProcessGrid(document.getElementById('processGridWertschoepfung'), wertschoepfung);
+                renderProcessGrid(document.getElementById('processGridUnterstuetzung'), unterstuetzung);
+            } catch (e) {
+                // Fallback: keep static HTML list
+                console.warn('Konnte Prozesse nicht dynamisch laden, nutze statische Liste.', e);
+            }
+        }
         
-        window.addEventListener('load', loadMasterConfig);
+        window.addEventListener('load', () => {
+            loadMasterConfig();
+            loadProcessCatalog();
+        });
     </script>
 </body>
 </html>
