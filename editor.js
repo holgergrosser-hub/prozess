@@ -168,18 +168,43 @@ function drawConnections() {
     
     svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'arrow-layer');
+    // Ensure the SVG viewport matches the canvas size (important for scrolled/large canvases)
+    const svgWidth = Math.max(canvas.scrollWidth || 0, canvas.clientWidth || 0, 1);
+    const svgHeight = Math.max(canvas.scrollHeight || 0, canvas.clientHeight || 0, 1);
+    svg.setAttribute('width', String(svgWidth));
+    svg.setAttribute('height', String(svgHeight));
+    svg.setAttribute('viewBox', `0 0 ${svgWidth} ${svgHeight}`);
+    svg.setAttribute('preserveAspectRatio', 'none');
     svg.innerHTML = '<defs><marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#000"/></marker></defs>';
     
     currentProcess.connections.forEach((conn, idx) => {
         const from = document.getElementById(conn.from);
         const to = document.getElementById(conn.to);
         if (!from || !to) return;
-        
-        const fromCenter = getBoxCenter(from);
-        const toCenter = getBoxCenter(to);
-        
-        const midX = (fromCenter.x + toCenter.x) / 2;
-        const path = `M ${fromCenter.x} ${fromCenter.y} Q ${midX} ${fromCenter.y}, ${midX} ${(fromCenter.y + toCenter.y) / 2} T ${toCenter.x} ${toCenter.y}`;
+
+        const fromRect = getBoxRectInCanvas(from, canvas);
+        const toRect = getBoxRectInCanvas(to, canvas);
+        if (!fromRect || !toRect) return;
+
+        const anchors = getConnectionAnchors(fromRect, toRect);
+        const { start, end } = anchors;
+
+        // Smooth curve (cubic Bezier) from start to end
+        const dx = end.x - start.x;
+        const dy = end.y - start.y;
+        const isMostlyHorizontal = Math.abs(dx) >= Math.abs(dy);
+
+        const bend = isMostlyHorizontal ? Math.max(60, Math.min(240, Math.abs(dx) * 0.5))
+            : Math.max(60, Math.min(240, Math.abs(dy) * 0.5));
+
+        const c1 = isMostlyHorizontal
+            ? { x: start.x + Math.sign(dx || 1) * bend, y: start.y }
+            : { x: start.x, y: start.y + Math.sign(dy || 1) * bend };
+        const c2 = isMostlyHorizontal
+            ? { x: end.x - Math.sign(dx || 1) * bend, y: end.y }
+            : { x: end.x, y: end.y - Math.sign(dy || 1) * bend };
+
+        const path = `M ${start.x} ${start.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${end.x} ${end.y}`;
         
         const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         pathEl.setAttribute('d', path);
@@ -189,11 +214,22 @@ function drawConnections() {
         
         if (conn.label) {
             const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', midX);
-            text.setAttribute('y', (fromCenter.y + toCenter.y) / 2);
             text.setAttribute('class', 'arrow-label');
             text.setAttribute('text-anchor', 'middle');
             text.textContent = conn.label;
+
+            // Place label at path midpoint (after path is in the DOM)
+            try {
+                const len = pathEl.getTotalLength();
+                const mid = pathEl.getPointAtLength(len / 2);
+                text.setAttribute('x', String(mid.x));
+                text.setAttribute('y', String(mid.y - 6));
+            } catch {
+                // Fallback: geometric midpoint
+                text.setAttribute('x', String((start.x + end.x) / 2));
+                text.setAttribute('y', String((start.y + end.y) / 2));
+            }
+
             svg.appendChild(text);
         }
     });
@@ -201,11 +237,52 @@ function drawConnections() {
     canvas.appendChild(svg);
 }
 
-function getBoxCenter(box) {
+function getBoxRectInCanvas(boxEl, canvasEl) {
+    if (!boxEl || !canvasEl) return null;
+    const box = boxEl.getBoundingClientRect();
+    const canvas = canvasEl.getBoundingClientRect();
+    const left = box.left - canvas.left;
+    const top = box.top - canvas.top;
+    const width = box.width;
+    const height = box.height;
     return {
-        x: box.offsetLeft + box.offsetWidth / 2,
-        y: box.offsetTop + box.offsetHeight / 2
+        left,
+        top,
+        width,
+        height,
+        right: left + width,
+        bottom: top + height,
+        cx: left + width / 2,
+        cy: top + height / 2
     };
+}
+
+function getConnectionAnchors(fromRect, toRect) {
+    const dx = toRect.cx - fromRect.cx;
+    const dy = toRect.cy - fromRect.cy;
+    const isMostlyHorizontal = Math.abs(dx) >= Math.abs(dy);
+
+    if (isMostlyHorizontal) {
+        const start = {
+            x: dx >= 0 ? fromRect.right : fromRect.left,
+            y: fromRect.cy
+        };
+        const end = {
+            x: dx >= 0 ? toRect.left : toRect.right,
+            y: toRect.cy
+        };
+        return { start, end };
+    }
+
+    const start = {
+        x: fromRect.cx,
+        y: dy >= 0 ? fromRect.bottom : fromRect.top
+    };
+    const end = {
+        x: toRect.cx,
+        y: dy >= 0 ? toRect.top : toRect.bottom
+    };
+    return { start, end };
 }
 
 function attachEventListeners() {
