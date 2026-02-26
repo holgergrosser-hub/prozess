@@ -283,6 +283,12 @@ body {
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
 
+/* Decision boxes are clipped (diamond). Keep delete button inside the shape. */
+.box-decision .delete-box {
+    top: 6px;
+    right: 6px;
+}
+
 .box-document {
     background: #C8E6C9;
     border-radius: 0 0 20px 20px;
