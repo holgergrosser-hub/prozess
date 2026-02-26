@@ -6,6 +6,7 @@ let connectionMode = false;
 let connectionStart = null;
 let draggedElement = null;
 let masterConfig = {};
+let selectedBoxEl = null;
 
 // Init
 async function init() {
@@ -291,6 +292,14 @@ function attachEventListeners() {
         box.addEventListener('dragend', handleDragEnd);
         box.addEventListener('click', handleBoxClick);
     });
+
+    // Click on empty canvas area clears selection
+    const canvas = document.querySelector('.canvas');
+    if (canvas) {
+        canvas.addEventListener('click', () => {
+            clearSelectedBox();
+        });
+    }
     
     document.querySelectorAll('.swimlane-content').forEach(lane => {
         lane.addEventListener('dragover', e => e.preventDefault());
@@ -377,27 +386,51 @@ function handleDrop(e) {
 }
 
 function handleBoxClick(e) {
-    if (!connectionMode) return;
-    
-    e.stopPropagation();
     const box = e.target.closest('.process-box');
-    
+    if (!box) return;
+
+    // Let the inline delete button work without changing selection/connection state.
+    if (e.target && e.target.closest && e.target.closest('.delete-box')) return;
+
+    e.stopPropagation();
+
+    if (!connectionMode) {
+        setSelectedBox(box);
+        return;
+    }
+
     if (!connectionStart) {
         connectionStart = box;
-        box.classList.add('selected');
+        setSelectedBox(box);
     } else {
         const label = prompt('Label (optional, z.B. "Ja", "Nein"):') || '';
-        
+
         currentProcess.connections.push({
             from: connectionStart.id,
             to: box.id,
             label: label
         });
-        
-        connectionStart.classList.remove('selected');
+
+        clearSelectedBox();
         connectionStart = null;
         drawConnections();
     }
+}
+
+function clearSelectedBox() {
+    if (selectedBoxEl) {
+        selectedBoxEl.classList.remove('selected');
+        selectedBoxEl = null;
+    }
+}
+
+function setSelectedBox(boxEl) {
+    if (!boxEl) return;
+    if (selectedBoxEl && selectedBoxEl !== boxEl) {
+        selectedBoxEl.classList.remove('selected');
+    }
+    selectedBoxEl = boxEl;
+    selectedBoxEl.classList.add('selected');
 }
 
 function updateBoxPosition(box) {

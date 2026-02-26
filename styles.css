@@ -269,6 +269,10 @@ body {
     display: block;
 }
 
+.process-box.selected .delete-box {
+    display: block;
+}
+
 /* Box Types */
 .box-action {
     background: #FFF9C4;
@@ -285,8 +289,10 @@ body {
 
 /* Decision boxes are clipped (diamond). Keep delete button inside the shape. */
 .box-decision .delete-box {
-    top: 6px;
-    right: 6px;
+    top: 4px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
 }
 
 .box-document {
