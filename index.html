@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prozessdiagramm-Editor - Master</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .settings-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .settings-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .form-field input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn-secondary {
+            background: #2196F3;
+        }
+        
+        .btn-secondary:hover {
+            background: #0b7dda;
+        }
+        
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .process-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .process-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        .process-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .process-card p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .category-title {
+            font-size: 24px;
+            color: #333;
+            margin: 40px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .legend-section {
+            background: #fff9e6;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .legend-shape {
+            min-width: 80px;
+            height: 50px;
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+        
+        .shape-action {
+            background: #FFF9C4;
+        }
+        
+        .shape-decision {
+            background: #FFCC80;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+        
+        .shape-document {
+            background: #C8E6C9;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        .shape-start-end {
+            background: #B3E5FC;
+            border-radius: 25px;
+        }
+        
+        .shape-subprocess {
+            background: white;
+        }
+        
+        .shape-software {
+            background: #E1BEE7;
+            border-radius: 50%;
+        }
+        
+        .legend-text {
+            flex: 1;
+        }
+        
+        .legend-text strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .legend-text p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Prozessdiagramm-Editor</h1>
+            <p>Vollständig editierbare Prozessdarstellung für Ihr QM-System</p>
+        </div>
+        
+        <div class="content">
+            <!-- Master-Einstellungen -->
+            <div class="settings-section">
+                <h2>⚙️ Master-Einstellungen</h2>
+                <p style="margin-bottom: 20px; color: #666;">Diese Einstellungen gelten für alle Prozessdiagramme.</p>
+                
+                <div class="success-message" id="successMessage">
+                    ✅ Einstellungen erfolgreich gespeichert!
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-field">
+                        <label>Firmenname / Logo-Text:</label>
+                        <input type="text" id="masterLogo" placeholder="z.B. Nest OG" value="SIUT">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label>Ersteller (Standard):</label>
+                        <input type="text" id="masterErsteller" placeholder="z.B. QMB" value="QMB">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label>Prüfung (Standard):</label>
+                        <input type="text" id="masterPruefung" placeholder="z.B. Prozessverantwortlicher" value="Prozessverantwortlicher">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label>Freigabe (Standard):</label>
+                        <input type="text" id="masterFreigabe" placeholder="z.B. GF" value="GF">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label>Dokumenten-Prefix:</label>
+                        <input type="text" id="masterDocPrefix" placeholder="z.B. QM-DOC-" value="Prozess_">
+                    </div>
+                    
+                    <div class="form-field">
+                        <label>Versionsnummer:</label>
+                        <input type="text" id="masterVersion" placeholder="z.B. v1.0" value="v1.0">
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="saveMasterSettings()">💾 Einstellungen speichern</button>
+            </div>
+            
+            <!-- Zeichenerklärung -->
+            <div class="legend-section">
+                <h2>📐 Zeichenerklärung</h2>
+                <p style="margin-bottom: 20px; color: #666;">Diese Symbole werden in den Prozessdiagrammen verwendet:</p>
+                
+                <div class="legend-grid">
+                    <div class="legend-item">
+                        <div class="legend-shape shape-action">Aktion</div>
+                        <div class="legend-text">
+                            <strong>Aktion</strong>
+                            <p>Normaler Vorgangspunkt in einem Prozess. Beschreibt einen aktuellen Prozessschritt.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-shape shape-decision">Ja/Nein</div>
+                        <div class="legend-text">
+                            <strong>Entscheidungsknoten</strong>
+                            <p>An dieser Stelle muss eine Entscheidung getroffen werden (Ja/Nein).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-shape shape-document">Dokument</div>
+                        <div class="legend-text">
+                            <strong>Dokument</strong>
+                            <p>Spezielles Dokument, Anleitung oder Formular, die den Prozessschritt beschreiben.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-shape shape-start-end">Start/Ende</div>
+                        <div class="legend-text">
+                            <strong>Anfang- und Endpunkt</strong>
+                            <p>Kennzeichnet Start oder Ende eines Prozesses und verweist auf die Fortsetzung.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-shape shape-subprocess">Teilprozess</div>
+                        <div class="legend-text">
+                            <strong>Teilprozess</strong>
+                            <p>Teilprozesse innerhalb der Prozesse Führung, Wertschöpfung und Unterstützung.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-item">
+                        <div class="legend-shape shape-software">Software</div>
+                        <div class="legend-text">
+                            <strong>Software</strong>
+                            <p>Zeigt an, dass der Prozessschritt durch eine Software unterstützt wird.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Prozessliste -->
+            <h2 class="category-title">📊 Führungsprozesse</h2>
+            <div class="process-grid">
+                <div class="process-card" onclick="openProcess('managementbewertung')">
+                    <h3>Managementbewertung</h3>
+                    <p>Jährliche Bewertung des QM-Systems durch die Geschäftsführung</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('risiken-chancen')">
+                    <h3>Risiken und Chancen</h3>
+                    <p>Ermittlung und Bewertung von Risiken und Chancen</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('internes-audit')">
+                    <h3>Internes Audit</h3>
+                    <p>Planung und Durchführung interner Audits</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('massnahmen')">
+                    <h3>Maßnahmenabwicklung</h3>
+                    <p>Verwaltung und Überwachung von Korrektur- und Verbesserungsmaßnahmen</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('schulungen')">
+                    <h3>Schulungen und Kompetenzen</h3>
+                    <p>Ermittlung Schulungsbedarf und Kompetenzentwicklung</p>
+                </div>
+            </div>
+            
+            <h2 class="category-title">🏭 Wertschöpfungsprozesse</h2>
+            <div class="process-grid">
+                <div class="process-card" onclick="openProcess('einkauf')">
+                    <h3>Einkauf und Wareneingang</h3>
+                    <p>Beschaffungsprozess von der Anfrage bis zur Warenannahme</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('wareneingang')">
+                    <h3>Wareneingang</h3>
+                    <p>Prüfung und Freigabe eingehender Waren</p>
+                </div>
+            </div>
+            
+            <h2 class="category-title">🛠️ Unterstützungsprozesse</h2>
+            <div class="process-grid">
+                <div class="process-card" onclick="openProcess('kundenzufriedenheit')">
+                    <h3>Kundenzufriedenheit</h3>
+                    <p>Ermittlung und Bewertung der Kundenzufriedenheit</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('reklamationen')">
+                    <h3>Kundenreklamationen</h3>
+                    <p>Bearbeitung von Kundenbeschwerden und Reklamationen</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('lieferanten')">
+                    <h3>Lieferantenbewertung</h3>
+                    <p>Bewertung und Auswahl von Lieferanten</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('wartung')">
+                    <h3>Wartung der Maschinen</h3>
+                    <p>Planung und Durchführung von Maschinenwartungen</p>
+                </div>
+                
+                <div class="process-card" onclick="openProcess('pruefmittel')">
+                    <h3>Prüfmittelüberwachung</h3>
+                    <p>Kalibrierung und Überwachung von Prüfmitteln</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px; text-align: center;">
+                <button class="btn btn-secondary" onclick="openProcess('new')">➕ Neuen Prozess erstellen</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function loadMasterConfig() {
+            const saved = localStorage.getItem('masterConfig');
+            if (saved) {
+                const config = JSON.parse(saved);
+                document.getElementById('masterLogo').value = config.logo || 'SIUT';
+                document.getElementById('masterErsteller').value = config.ersteller || 'QMB';
+                document.getElementById('masterPruefung').value = config.pruefung || 'Prozessverantwortlicher';
+                document.getElementById('masterFreigabe').value = config.freigabe || 'GF';
+                document.getElementById('masterDocPrefix').value = config.docPrefix || 'Prozess_';
+                document.getElementById('masterVersion').value = config.version || 'v1.0';
+            }
+        }
+        
+        function saveMasterSettings() {
+            const config = {
+                logo: document.getElementById('masterLogo').value,
+                ersteller: document.getElementById('masterErsteller').value,
+                pruefung: document.getElementById('masterPruefung').value,
+                freigabe: document.getElementById('masterFreigabe').value,
+                docPrefix: document.getElementById('masterDocPrefix').value,
+                version: document.getElementById('masterVersion').value,
+                date: new Date().toISOString().split('T')[0]
+            };
+            
+            localStorage.setItem('masterConfig', JSON.stringify(config));
+            
+            const msg = document.getElementById('successMessage');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+        
+        function openProcess(processName) {
+            window.location.href = `editor.html?process=${processName}`;
+        }
+        
+        window.addEventListener('load', loadMasterConfig);
+    </script>
+</body>
+</html>

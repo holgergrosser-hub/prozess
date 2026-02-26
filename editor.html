@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prozess-Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="editor-container">
+        <!-- Toolbar -->
+        <div class="toolbar">
+            <a href="index.html" class="btn btn-back">← Zurück</a>
+            
+            <div class="toolbar-group">
+                <button class="btn btn-primary" onclick="addBox('action')">➕ Aktion</button>
+                <button class="btn" onclick="addBox('decision')">◆ Entscheidung</button>
+                <button class="btn" onclick="addBox('document')">📄 Dokument</button>
+                <button class="btn" onclick="addBox('start-end')">⚪ Start/Ende</button>
+                <button class="btn" onclick="addBox('subprocess')">📋 Teilprozess</button>
+                <button class="btn" onclick="addBox('software')">💻 Software</button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button class="btn" onclick="addSwimlane()">🏊 Swimlane hinzufügen</button>
+                <button class="btn" id="connectionBtn" onclick="toggleConnectionMode()">🔗 Verbindung erstellen</button>
+            </div>
+            
+            <div class="toolbar-group">
+                <button class="btn btn-success" onclick="saveProcess()">💾 Speichern</button>
+                <button class="btn" onclick="exportHTML()">📥 Als HTML exportieren</button>
+                <button class="btn" onclick="window.print()">🖨️ Drucken</button>
+            </div>
+        </div>
+        
+        <!-- Connection Mode Info -->
+        <div class="connection-info" id="connectionInfo" style="display: none;">
+            🔗 <strong>Verbindungs-Modus aktiv:</strong> Klicken Sie auf Startbox, dann auf Zielbox. Label optional (z.B. "Ja", "Nein").
+            <button onclick="toggleConnectionMode()">Abbrechen</button>
+        </div>
+        
+        <!-- Process Container -->
+        <div class="process-container" id="processContainer">
+            <!-- Wird dynamisch gefüllt -->
+        </div>
+    </div>
+    
+    <script src="process-data.js"></script>
+    <script src="editor.js"></script>
+</body>
+</html>
