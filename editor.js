@@ -9,6 +9,8 @@ let masterConfig = {};
 let selectedBoxEl = null;
 let laneResizeState = null;
 let identityInitPromise = null;
+let identityEndpointCheckPromise = null;
+let identityEndpointAvailable = null;
 
 // Init
 async function init() {
@@ -53,6 +55,28 @@ function setupAuthUI() {
         return;
     }
 
+    const checkIdentityEndpoint = async () => {
+        if (identityEndpointAvailable === true || identityEndpointAvailable === false) return identityEndpointAvailable;
+        if (window.location.protocol === 'file:') {
+            identityEndpointAvailable = false;
+            return identityEndpointAvailable;
+        }
+
+        if (!identityEndpointCheckPromise) {
+            identityEndpointCheckPromise = (async () => {
+                try {
+                    const res = await fetch('/.netlify/identity', { cache: 'no-store' });
+                    identityEndpointAvailable = !!res.ok;
+                } catch {
+                    identityEndpointAvailable = false;
+                }
+                return identityEndpointAvailable;
+            })();
+        }
+
+        return await identityEndpointCheckPromise;
+    };
+
     const update = () => {
         const user = netlifyIdentity.currentUser();
         if (user) {
@@ -71,6 +95,11 @@ function setupAuthUI() {
         if (user) {
             netlifyIdentity.logout();
         } else {
+            // If Identity isn't configured for this origin, avoid showing a broken modal.
+            if (identityEndpointAvailable === false) {
+                alert('Login ist für diese URL nicht konfiguriert. Bitte über die Netlify-URL öffnen und in Netlify Identity aktivieren.');
+                return;
+            }
             netlifyIdentity.open();
         }
     });
@@ -94,12 +123,25 @@ function setupAuthUI() {
                 });
             }
 
-            try {
-                // Safe to call multiple times; widget ignores subsequent init.
-                netlifyIdentity.init();
-            } catch {
-                done();
-            }
+            // Only init when the Identity endpoint exists; otherwise the widget
+            // logs "Failed to load settings from /.netlify/identity".
+            void (async () => {
+                const ok = await checkIdentityEndpoint();
+                if (!ok) {
+                    statusEl.textContent = 'Login: nicht konfiguriert';
+                    btnEl.textContent = 'Login';
+                    btnEl.disabled = true;
+                    done();
+                    return;
+                }
+
+                try {
+                    // Safe to call multiple times; widget ignores subsequent init.
+                    netlifyIdentity.init();
+                } catch {
+                    done();
+                }
+            })();
 
             // Fallback: don't block forever if the widget doesn't fire init.
             setTimeout(done, 800);
