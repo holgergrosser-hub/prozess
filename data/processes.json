@@ -1935,6 +1935,20 @@
         }
       ],
       "connections": []
+    },
+    {
+      "key": "wwwww",
+      "category": "unterstuetzung",
+      "title": "Neuer P^12^12rozess",
+      "description": "",
+      "swimlanes": [
+        {
+          "name": "Bereich 1",
+          "height": 300,
+          "boxes": []
+        }
+      ],
+      "connections": []
     }
   ]
 }
