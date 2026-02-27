@@ -109,13 +109,13 @@ exports.handler = async function handler(event, context) {
     }
 
     const processKey = typeof payload.processKey === 'string' ? payload.processKey.trim() : '';
-    const process = payload.process;
+    const processData = payload.process;
 
     if (!processKey || !/^[a-z0-9\-]{3,64}$/.test(processKey)) {
         return jsonResponse(400, { error: 'Invalid processKey' });
     }
 
-    if (!process || typeof process !== 'object') {
+    if (!processData || typeof processData !== 'object') {
         return jsonResponse(400, { error: 'Missing process' });
     }
 
@@ -143,15 +143,15 @@ exports.handler = async function handler(event, context) {
 
         const processes = fileJson.processes;
         const idx = processes.findIndex(p => p && p.key === processKey);
-        const category = normalizeCategory(process.category) || 'unterstuetzung';
-        const description = typeof process.description === 'string' ? process.description : '';
+        const category = normalizeCategory(processData.category) || 'unterstuetzung';
+        const description = typeof processData.description === 'string' ? processData.description : '';
         const nextProc = {
             key: processKey,
             category,
-            title: process.title || 'Neuer Prozess',
+            title: processData.title || 'Neuer Prozess',
             description,
-            swimlanes: Array.isArray(process.swimlanes) ? process.swimlanes : [],
-            connections: Array.isArray(process.connections) ? process.connections : []
+            swimlanes: Array.isArray(processData.swimlanes) ? processData.swimlanes : [],
+            connections: Array.isArray(processData.connections) ? processData.connections : []
         };
 
         if (idx >= 0) {
