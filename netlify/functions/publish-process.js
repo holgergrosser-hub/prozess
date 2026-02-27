@@ -144,10 +144,12 @@ exports.handler = async function handler(event, context) {
         const processes = fileJson.processes;
         const idx = processes.findIndex(p => p && p.key === processKey);
         const category = normalizeCategory(process.category) || 'unterstuetzung';
+        const description = typeof process.description === 'string' ? process.description : '';
         const nextProc = {
             key: processKey,
             category,
             title: process.title || 'Neuer Prozess',
+            description,
             swimlanes: Array.isArray(process.swimlanes) ? process.swimlanes : [],
             connections: Array.isArray(process.connections) ? process.connections : []
         };

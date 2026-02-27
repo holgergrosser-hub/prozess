@@ -4,10 +4,12 @@
 
 const EMPTY_PROCESS = {
     category: 'unterstuetzung',
+    description: '',
     title: 'Neuer Prozess',
     swimlanes: [
         {
             name: 'Bereich 1',
+            height: 300,
             boxes: []
         }
     ],

@@ -129,6 +129,18 @@ body {
     cursor: text;
 }
 
+.process-description {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #555;
+    cursor: text;
+    min-height: 18px;
+}
+
+.process-description:hover {
+    background: #f0f8ff;
+}
+
 .process-title:hover {
     background: #f0f8ff;
 }
@@ -162,6 +174,20 @@ body {
     min-height: 300px;
     position: relative;
     display: flex;
+}
+
+.swimlane-resize {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 12px;
+    cursor: row-resize;
+    z-index: 4;
+}
+
+.swimlane-resize:hover {
+    background: rgba(0, 0, 0, 0.04);
 }
 
 .swimlane:last-child {

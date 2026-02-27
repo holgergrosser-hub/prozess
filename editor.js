@@ -7,6 +7,7 @@ let connectionStart = null;
 let draggedElement = null;
 let masterConfig = {};
 let selectedBoxEl = null;
+let laneResizeState = null;
 
 // Init
 async function init() {
@@ -84,7 +85,10 @@ function renderProcess() {
     
     let html = `
         <div class="process-header">
-            <div class="process-title" contenteditable="true">${currentProcess.title}</div>
+            <div>
+                <div class="process-title" contenteditable="true">${currentProcess.title}</div>
+                <div class="process-description" contenteditable="true">${(currentProcess.description || '').toString()}</div>
+            </div>
             <div class="logo-area" contenteditable="true">${masterConfig.logo}</div>
         </div>
         <div class="canvas-wrapper">
@@ -92,8 +96,10 @@ function renderProcess() {
     `;
     
     currentProcess.swimlanes.forEach((lane, idx) => {
+        const laneHeight = Number.isFinite(lane?.height) ? lane.height : null;
+        const laneStyle = laneHeight ? `style="height: ${Math.max(120, Math.round(laneHeight))}px;"` : '';
         html += `
-            <div class="swimlane">
+            <div class="swimlane" ${laneStyle}>
                 <div class="swimlane-label" contenteditable="true">
                     ${lane.name}
                     <button class="delete-lane" onclick="deleteSwimlane(${idx})">×</button>
@@ -107,6 +113,7 @@ function renderProcess() {
         
         html += `
                 </div>
+                <div class="swimlane-resize" data-lane="${idx}" title="Höhe ziehen"></div>
             </div>
         `;
     });
@@ -306,6 +313,61 @@ function attachEventListeners() {
         lane.addEventListener('drop', handleDrop);
         lane.addEventListener('dblclick', handleLaneDblClick);
     });
+
+    document.querySelectorAll('.swimlane-resize').forEach(handle => {
+        handle.addEventListener('mousedown', handleLaneResizeStart);
+        handle.addEventListener('touchstart', handleLaneResizeStart, { passive: false });
+    });
+}
+
+function handleLaneResizeStart(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const handle = e.currentTarget;
+    const laneIdx = parseInt(handle?.dataset?.lane);
+    if (!Number.isFinite(laneIdx) || !currentProcess?.swimlanes?.[laneIdx]) return;
+
+    const laneEl = handle.closest('.swimlane');
+    if (!laneEl) return;
+
+    const startY = e.touches?.[0]?.clientY ?? e.clientY;
+    const startHeight = laneEl.getBoundingClientRect().height;
+
+    laneResizeState = {
+        laneIdx,
+        laneEl,
+        startY,
+        startHeight
+    };
+
+    window.addEventListener('mousemove', handleLaneResizeMove);
+    window.addEventListener('mouseup', handleLaneResizeEnd);
+    window.addEventListener('touchmove', handleLaneResizeMove, { passive: false });
+    window.addEventListener('touchend', handleLaneResizeEnd);
+}
+
+function handleLaneResizeMove(e) {
+    if (!laneResizeState) return;
+    e.preventDefault();
+
+    const y = e.touches?.[0]?.clientY ?? e.clientY;
+    const delta = y - laneResizeState.startY;
+    const nextHeight = Math.max(120, Math.round(laneResizeState.startHeight + delta));
+
+    laneResizeState.laneEl.style.height = `${nextHeight}px`;
+    currentProcess.swimlanes[laneResizeState.laneIdx].height = nextHeight;
+    drawConnections();
+}
+
+function handleLaneResizeEnd() {
+    if (!laneResizeState) return;
+    laneResizeState = null;
+
+    window.removeEventListener('mousemove', handleLaneResizeMove);
+    window.removeEventListener('mouseup', handleLaneResizeEnd);
+    window.removeEventListener('touchmove', handleLaneResizeMove);
+    window.removeEventListener('touchend', handleLaneResizeEnd);
 }
 
 function handleLaneDblClick(e) {
@@ -524,10 +586,25 @@ function syncProcessFromDOM() {
         currentProcess.title = titleEl.textContent;
     }
 
+    // Beschreibung aktualisieren
+    const descEl = document.querySelector('.process-description');
+    if (descEl) {
+        currentProcess.description = descEl.textContent;
+    }
+
     // Swimlane-Namen aktualisieren
     document.querySelectorAll('.swimlane-label').forEach((label, idx) => {
         if (currentProcess.swimlanes[idx]) {
             currentProcess.swimlanes[idx].name = label.textContent.replace('×', '').trim();
+        }
+    });
+
+    // Swimlane-Höhen aktualisieren
+    document.querySelectorAll('.swimlane').forEach((laneEl, idx) => {
+        if (!currentProcess.swimlanes[idx]) return;
+        const h = Math.round(laneEl.getBoundingClientRect().height);
+        if (Number.isFinite(h) && h > 0) {
+            currentProcess.swimlanes[idx].height = Math.max(120, h);
         }
     });
 

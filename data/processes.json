@@ -3,10 +3,12 @@
     {
       "key": "managementbewertung",
       "category": "fuehrung",
+      "description": "",
       "title": "Managementbewertung",
       "swimlanes": [
         {
           "name": "QMB",
+          "height": 300,
           "boxes": [
             {
               "id": "mb-1",
@@ -68,6 +70,7 @@
         },
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "mb-9",
@@ -159,10 +162,12 @@
     {
       "key": "risiken-chancen",
       "category": "fuehrung",
+      "description": "",
       "title": "Risiken und Chancen",
       "swimlanes": [
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "rc-1",
@@ -281,10 +286,12 @@
     {
       "key": "internes-audit",
       "category": "fuehrung",
+      "description": "",
       "title": "Internes Audit",
       "swimlanes": [
         {
           "name": "QMB",
+          "height": 300,
           "boxes": [
             {
               "id": "ia-1",
@@ -318,6 +325,7 @@
         },
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "ia-5",
@@ -344,6 +352,7 @@
         },
         {
           "name": "Auditor",
+          "height": 300,
           "boxes": [
             {
               "id": "ia-8",
@@ -419,6 +428,7 @@
         },
         {
           "name": "Verantwortliche",
+          "height": 300,
           "boxes": [
             {
               "id": "ia-18",
@@ -500,10 +510,12 @@
     {
       "key": "massnahmen",
       "category": "fuehrung",
+      "description": "",
       "title": "Maßnahmenabwicklung",
       "swimlanes": [
         {
           "name": "Eingaben",
+          "height": 300,
           "boxes": [
             {
               "id": "ma-1",
@@ -558,6 +570,7 @@
         },
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "ma-8",
@@ -605,6 +618,7 @@
         },
         {
           "name": "Alle Bereiche",
+          "height": 300,
           "boxes": [
             {
               "id": "ma-14",
@@ -624,6 +638,7 @@
         },
         {
           "name": "QMB",
+          "height": 300,
           "boxes": [
             {
               "id": "ma-16",
@@ -742,10 +757,12 @@
     {
       "key": "schulungen",
       "category": "fuehrung",
+      "description": "",
       "title": "Schulungen und Kompetenzen",
       "swimlanes": [
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "sc-1",
@@ -779,6 +796,7 @@
         },
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "sc-5",
@@ -826,6 +844,7 @@
         },
         {
           "name": "Mitarbeiter",
+          "height": 300,
           "boxes": [
             {
               "id": "sc-11",
@@ -883,10 +902,12 @@
     {
       "key": "einkauf",
       "category": "wertschoepfung",
+      "description": "",
       "title": "Einkauf und Wareneingang",
       "swimlanes": [
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "ek-1",
@@ -997,6 +1018,7 @@
         },
         {
           "name": "Lieferant",
+          "height": 300,
           "boxes": [
             {
               "id": "ek-16",
@@ -1128,10 +1150,12 @@
     {
       "key": "wareneingang",
       "category": "wertschoepfung",
+      "description": "",
       "title": "Wareneingang",
       "swimlanes": [
         {
           "name": "Vertriebscontrolling, Logistik",
+          "height": 300,
           "boxes": [
             {
               "id": "we-1",
@@ -1193,6 +1217,7 @@
         },
         {
           "name": "QS",
+          "height": 300,
           "boxes": [
             {
               "id": "we-9",
@@ -1323,10 +1348,12 @@
     {
       "key": "kundenzufriedenheit",
       "category": "unterstuetzung",
+      "description": "",
       "title": "Kundenzufriedenheit",
       "swimlanes": [
         {
           "name": "Vertrieb",
+          "height": 300,
           "boxes": [
             {
               "id": "kz-1",
@@ -1353,6 +1380,7 @@
         },
         {
           "name": "QMB",
+          "height": 300,
           "boxes": [
             {
               "id": "kz-4",
@@ -1365,6 +1393,7 @@
         },
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "kz-5",
@@ -1409,10 +1438,12 @@
     {
       "key": "reklamationen",
       "category": "unterstuetzung",
+      "description": "",
       "title": "Kundenreklamationen",
       "swimlanes": [
         {
           "name": "Kunde",
+          "height": 300,
           "boxes": [
             {
               "id": "kr-1",
@@ -1432,6 +1463,7 @@
         },
         {
           "name": "Geschäftsführer",
+          "height": 300,
           "boxes": [
             {
               "id": "kr-3",
@@ -1501,10 +1533,12 @@
     {
       "key": "lieferanten",
       "category": "unterstuetzung",
+      "description": "",
       "title": "Lieferantenbewertung",
       "swimlanes": [
         {
           "name": "Geschäftsführung",
+          "height": 300,
           "boxes": [
             {
               "id": "li-1",
@@ -1601,10 +1635,12 @@
     {
       "key": "wartung",
       "category": "unterstuetzung",
+      "description": "",
       "title": "Wartung der Maschinen",
       "swimlanes": [
         {
           "name": "Wartungsbeauftragter",
+          "height": 300,
           "boxes": [
             {
               "id": "wa-1",
@@ -1666,6 +1702,7 @@
         },
         {
           "name": "Dienstleister",
+          "height": 300,
           "boxes": [
             {
               "id": "wa-9",
@@ -1734,10 +1771,12 @@
     {
       "key": "pruefmittel",
       "category": "unterstuetzung",
+      "description": "",
       "title": "Prüfmittelüberwachung",
       "swimlanes": [
         {
           "name": "Prüfmittelbeauftragter",
+          "height": 300,
           "boxes": [
             {
               "id": "pm-1",
@@ -1785,6 +1824,7 @@
         },
         {
           "name": "Zuständiger",
+          "height": 300,
           "boxes": [
             {
               "id": "pm-7",
