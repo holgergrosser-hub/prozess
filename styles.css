@@ -36,6 +36,18 @@ body {
     flex-wrap: wrap;
 }
 
+.toolbar-auth {
+    margin-left: auto;
+    align-items: center;
+}
+
+.auth-status {
+    font-size: 12px;
+    color: #555;
+    padding: 0 6px;
+    user-select: none;
+}
+
 /* Buttons */
 .btn {
     padding: 10px 18px;

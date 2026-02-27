@@ -8,6 +8,7 @@ let draggedElement = null;
 let masterConfig = {};
 let selectedBoxEl = null;
 let laneResizeState = null;
+let identityInitPromise = null;
 
 // Init
 async function init() {
@@ -15,6 +16,8 @@ async function init() {
     currentProcessKey = urlParams.get('process');
     
     loadMasterConfig();
+
+    setupAuthUI();
 
     await loadProcessCatalog();
 
@@ -36,6 +39,127 @@ async function init() {
     
     renderProcess();
     attachEventListeners();
+}
+
+function setupAuthUI() {
+    const statusEl = document.getElementById('authStatus');
+    const btnEl = document.getElementById('authBtn');
+    if (!statusEl || !btnEl) return;
+
+    if (!window.netlifyIdentity) {
+        statusEl.textContent = 'Login: nicht verfügbar';
+        btnEl.textContent = 'Login';
+        btnEl.disabled = true;
+        return;
+    }
+
+    const update = () => {
+        const user = netlifyIdentity.currentUser();
+        if (user) {
+            const email = user.email || user.user_metadata?.email || '';
+            statusEl.textContent = email ? `Angemeldet: ${email}` : 'Angemeldet';
+            btnEl.textContent = 'Logout';
+        } else {
+            statusEl.textContent = 'Nicht angemeldet';
+            btnEl.textContent = 'Login';
+        }
+        btnEl.disabled = false;
+    };
+
+    btnEl.addEventListener('click', () => {
+        const user = netlifyIdentity.currentUser();
+        if (user) {
+            netlifyIdentity.logout();
+        } else {
+            netlifyIdentity.open();
+        }
+    });
+
+    // Make sure we wait for init once, otherwise currentUser() can be null
+    // even though the user has an active session.
+    if (!identityInitPromise) {
+        identityInitPromise = new Promise(resolve => {
+            let resolved = false;
+
+            const done = () => {
+                if (resolved) return;
+                resolved = true;
+                resolve();
+            };
+
+            if (typeof netlifyIdentity.on === 'function') {
+                netlifyIdentity.on('init', () => {
+                    update();
+                    done();
+                });
+            }
+
+            try {
+                // Safe to call multiple times; widget ignores subsequent init.
+                netlifyIdentity.init();
+            } catch {
+                done();
+            }
+
+            // Fallback: don't block forever if the widget doesn't fire init.
+            setTimeout(done, 800);
+        });
+    }
+
+    if (typeof netlifyIdentity.on === 'function') {
+        netlifyIdentity.on('login', update);
+        netlifyIdentity.on('logout', update);
+        netlifyIdentity.on('close', update);
+    }
+
+    update();
+}
+
+async function ensureLoggedIn() {
+    if (!window.netlifyIdentity) return null;
+
+    // Wait for Identity to initialize, so an existing session is detected.
+    try {
+        await (identityInitPromise || Promise.resolve());
+    } catch {
+        // ignore
+    }
+
+    const existing = netlifyIdentity.currentUser();
+    if (existing) return existing;
+
+    // If user closes the modal, we simply abort publish.
+    return await new Promise(resolve => {
+        let done = false;
+
+        const cleanup = () => {
+            if (typeof netlifyIdentity.off === 'function') {
+                try { netlifyIdentity.off('login', onLogin); } catch { /* ignore */ }
+                try { netlifyIdentity.off('close', onClose); } catch { /* ignore */ }
+            }
+        };
+
+        const onLogin = (user) => {
+            if (done) return;
+            done = true;
+            cleanup();
+            resolve(user || netlifyIdentity.currentUser());
+        };
+
+        const onClose = () => {
+            if (done) return;
+            done = true;
+            cleanup();
+            resolve(null);
+        };
+
+        if (typeof netlifyIdentity.on === 'function') {
+            netlifyIdentity.on('login', onLogin);
+            netlifyIdentity.on('close', onClose);
+        }
+
+        netlifyIdentity.open();
+    });
 }
 
 async function loadProcessCatalog() {
@@ -638,17 +762,18 @@ function saveProcess() {
 async function publishProcess() {
     syncProcessFromDOM();
 
+    if (window.location.protocol === 'file:') {
+        alert('Veröffentlichen funktioniert nur über eine Website-URL (Netlify) oder über `netlify dev` – nicht direkt als lokale Datei (file://).');
+        return;
+    }
+
     if (!window.netlifyIdentity) {
         alert('Netlify Identity ist nicht verfügbar. Auf Netlify deployen oder Identity aktivieren.');
         return;
     }
 
-    const user = netlifyIdentity.currentUser();
-    if (!user) {
-        const openLogin = confirm('Zum Veröffentlichen bitte zuerst anmelden. Login jetzt öffnen?');
-        if (openLogin) netlifyIdentity.open();
-        return;
-    }
+    const user = await ensureLoggedIn();
+    if (!user) return;
 
     let publishKey = currentProcessKey;
     if (!publishKey || publishKey === 'new') {
