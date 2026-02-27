@@ -1921,6 +1921,20 @@
           "to": "pm-6"
         }
       ]
+    },
+    {
+      "key": "test1",
+      "category": "unterstuetzung",
+      "title": "Neuer1^2 Pr22ozess",
+      "description": "",
+      "swimlanes": [
+        {
+          "name": "Bereich 1",
+          "height": 300,
+          "boxes": []
+        }
+      ],
+      "connections": []
     }
   ]
 }
