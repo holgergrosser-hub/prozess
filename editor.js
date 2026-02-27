@@ -65,7 +65,7 @@ function setupAuthUI() {
         if (!identityEndpointCheckPromise) {
             identityEndpointCheckPromise = (async () => {
                 try {
-                    const res = await fetch('/.netlify/identity', { cache: 'no-store' });
+                    const res = await fetch('/.netlify/identity/settings', { cache: 'no-store' });
                     identityEndpointAvailable = !!res.ok;
                 } catch {
                     identityEndpointAvailable = false;
