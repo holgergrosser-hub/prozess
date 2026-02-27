@@ -2,20 +2,19 @@
   "processes": [
     {
       "key": "managementbewertung",
-      "category": "fuehrung",
+      "category": "wertschoepfung",
+      "title": "Man123123agementbewertung",
       "description": "",
-      "title": "Managementbewertung",
       "swimlanes": [
         {
           "name": "QMB",
-          "height": 300,
           "boxes": [
             {
               "id": "mb-1",
               "type": "start-end",
               "text": "Maßnahmen-\nabwicklung",
-              "x": 50,
-              "y": 30
+              "x": 0,
+              "y": 76
             },
             {
               "id": "mb-2",
@@ -49,28 +48,42 @@
               "id": "mb-6",
               "type": "document",
               "text": "Liste der Normen\nund Gesetze",
-              "x": 820,
-              "y": 40
+              "x": 873,
+              "y": 56
             },
             {
               "id": "mb-7",
               "type": "document",
               "text": "Lieferanten-\nbewertung",
-              "x": 980,
-              "y": 40
+              "x": 1101,
+              "y": 124
             },
             {
               "id": "mb-8",
               "type": "action",
-              "text": "Entwurf vorbereiten",
+              "text": "Entwurf v23orbereiten",
               "x": 500,
-              "y": 140
+              "y": 195
+            },
+            {
+              "id": "custom-1772145730647",
+              "type": "decision",
+              "text": "Entscheidung?",
+              "x": 118,
+              "y": 138
+            },
+            {
+              "id": "text-1772149218638",
+              "type": "text",
+              "text": "asdsdads\na\nsd\nasd\n\n",
+              "x": 1328,
+              "y": 149
             }
-          ]
+          ],
+          "height": 300
         },
         {
           "name": "Geschäftsführung",
-          "height": 300,
           "boxes": [
             {
               "id": "mb-9",
@@ -107,7 +120,13 @@
               "x": 880,
               "y": 150
             }
-          ]
+          ],
+          "height": 300
+        },
+        {
+          "name": "ewr",
+          "boxes": [],
+          "height": 300
         }
       ],
       "connections": [
@@ -156,6 +175,21 @@
           "from": "mb-11",
           "to": "mb-13",
           "label": "Ja"
+        },
+        {
+          "from": "mb-9",
+          "to": "mb-9",
+          "label": "213"
+        },
+        {
+          "from": "mb-8",
+          "to": "mb-8",
+          "label": "123"
+        },
+        {
+          "from": "custom-1772145730647",
+          "to": "custom-1772145730647",
+          "label": "123"
         }
       ]
     },
