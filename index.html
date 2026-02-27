@@ -340,6 +340,10 @@
             </div>
             
             <!-- Prozessliste -->
+            <h2 class="category-title">📝 Entwürfe (dieses Gerät)</h2>
+            <p style="margin: 0 0 20px 0; color: #666;">Entwürfe werden lokal im Browser gespeichert und sind nur auf diesem Gerät sichtbar.</p>
+            <div class="process-grid" id="draftGrid"></div>
+
             <h2 class="category-title">📊 Führungsprozesse</h2>
             <div class="process-grid" id="processGridFuehrung">
                 <div class="process-card" onclick="openProcess('managementbewertung')">
@@ -453,6 +457,58 @@
             window.location.href = `editor.html?process=${processName}`;
         }
 
+        function loadDrafts() {
+            const grid = document.getElementById('draftGrid');
+            if (!grid) return;
+
+            const drafts = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const storageKey = localStorage.key(i);
+                if (!storageKey || !storageKey.startsWith('process_')) continue;
+                if (storageKey === 'process_new') continue;
+
+                const key = storageKey.substring('process_'.length);
+                if (!key) continue;
+
+                try {
+                    const raw = localStorage.getItem(storageKey);
+                    if (!raw) continue;
+                    const proc = JSON.parse(raw);
+                    drafts.push({
+                        key,
+                        title: (proc && proc.title) ? String(proc.title) : key,
+                        description: (proc && proc.description) ? String(proc.description) : ''
+                    });
+                } catch {
+                    // ignore broken drafts
+                }
+            }
+
+            if (drafts.length === 0) {
+                grid.innerHTML = '<div style="color:#666; font-size:14px;">Keine Entwürfe vorhanden.</div>';
+                return;
+            }
+
+            drafts.sort((a, b) => String(a.title).toLowerCase().localeCompare(String(b.title).toLowerCase(), 'de'));
+
+            grid.innerHTML = '';
+            for (const d of drafts) {
+                const card = document.createElement('div');
+                card.className = 'process-card';
+                card.onclick = () => openProcess(d.key);
+
+                const h3 = document.createElement('h3');
+                h3.textContent = d.title;
+                card.appendChild(h3);
+
+                const pEl = document.createElement('p');
+                pEl.textContent = d.description ? d.description : 'Entwurf (lokal gespeichert)';
+                card.appendChild(pEl);
+
+                grid.appendChild(card);
+            }
+        }
+
         function normalizeCategory(value) {
             if (value == null) return 'unterstuetzung';
             const raw = String(value).trim().toLowerCase();
@@ -533,6 +589,7 @@
         
         window.addEventListener('load', () => {
             loadMasterConfig();
+            loadDrafts();
             loadProcessCatalog();
         });
     </script>
