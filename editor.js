@@ -920,6 +920,76 @@ async function publishProcess() {
     }
 }
 
+async function deletePublishedProcess() {
+    if (!currentProcessKey || currentProcessKey === 'new') {
+        alert('Dieser Prozess hat noch keinen Key. Bitte zuerst veröffentlichen oder einen Key vergeben.');
+        return;
+    }
+
+    if (window.location.protocol === 'file:') {
+        alert('Löschen funktioniert nur über eine Website-URL (Netlify) oder über `netlify dev` – nicht direkt als lokale Datei (file://).');
+        return;
+    }
+
+    if (!window.netlifyIdentity) {
+        alert('Netlify Identity ist nicht verfügbar. Auf Netlify deployen oder Identity aktivieren.');
+        return;
+    }
+
+    const user = await ensureLoggedIn();
+    if (!user) return;
+
+    const key = String(currentProcessKey);
+    const typed = prompt(`Zum Löschen bitte den Prozess-Key exakt eingeben:\n${key}`);
+    if (typed == null) return;
+    if (typed.trim() !== key) {
+        alert('Abgebrochen: Key stimmt nicht überein.');
+        return;
+    }
+
+    let token;
+    try {
+        token = await user.jwt();
+    } catch (e) {
+        console.error(e);
+        alert('Konnte Login-Token nicht lesen. Bitte neu anmelden.');
+        return;
+    }
+
+    try {
+        const res = await fetch('/.netlify/functions/publish-process', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                processKey: key,
+                delete: true
+            })
+        });
+
+        const bodyText = await res.text();
+        if (!res.ok) {
+            console.error('Delete failed:', res.status, bodyText);
+            alert(`Löschen fehlgeschlagen (${res.status}).\n${bodyText}`);
+            return;
+        }
+
+        try {
+            localStorage.removeItem(`process_${key}`);
+        } catch {
+            // ignore
+        }
+
+        alert('Prozess wurde gelöscht.');
+        window.location.href = 'index.html';
+    } catch (err) {
+        console.error(err);
+        alert('Löschen fehlgeschlagen (Netzwerk/Server).');
+    }
+}
+
 function normalizeProcessCategory(value) {
     if (value == null) return '';
     const raw = String(value).trim().toLowerCase();

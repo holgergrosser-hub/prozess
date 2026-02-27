@@ -109,13 +109,14 @@ exports.handler = async function handler(event, context) {
     }
 
     const processKey = typeof payload.processKey === 'string' ? payload.processKey.trim() : '';
+    const isDelete = payload?.delete === true || String(payload?.action || '').toLowerCase() === 'delete';
     const processData = payload.process;
 
     if (!processKey || !/^[a-z0-9\-]{3,64}$/.test(processKey)) {
         return jsonResponse(400, { error: 'Invalid processKey' });
     }
 
-    if (!processData || typeof processData !== 'object') {
+    if (!isDelete && (!processData || typeof processData !== 'object')) {
         return jsonResponse(400, { error: 'Missing process' });
     }
 
@@ -143,27 +144,33 @@ exports.handler = async function handler(event, context) {
 
         const processes = fileJson.processes;
         const idx = processes.findIndex(p => p && p.key === processKey);
-        const category = normalizeCategory(processData.category) || 'unterstuetzung';
-        const description = typeof processData.description === 'string' ? processData.description : '';
-        const nextProc = {
-            key: processKey,
-            category,
-            title: processData.title || 'Neuer Prozess',
-            description,
-            swimlanes: Array.isArray(processData.swimlanes) ? processData.swimlanes : [],
-            connections: Array.isArray(processData.connections) ? processData.connections : []
-        };
-
-        if (idx >= 0) {
-            processes[idx] = nextProc;
+        if (isDelete) {
+            if (idx >= 0) {
+                processes.splice(idx, 1);
+            }
         } else {
-            processes.push(nextProc);
+            const category = normalizeCategory(processData.category) || 'unterstuetzung';
+            const description = typeof processData.description === 'string' ? processData.description : '';
+            const nextProc = {
+                key: processKey,
+                category,
+                title: processData.title || 'Neuer Prozess',
+                description,
+                swimlanes: Array.isArray(processData.swimlanes) ? processData.swimlanes : [],
+                connections: Array.isArray(processData.connections) ? processData.connections : []
+            };
+
+            if (idx >= 0) {
+                processes[idx] = nextProc;
+            } else {
+                processes.push(nextProc);
+            }
         }
 
         const newContent = JSON.stringify({ processes }, null, 2) + '\n';
 
         const putUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${encodeGitHubPath(dataPath)}`;
-        const commitMessage = `chore(process): update ${processKey}`;
+        const commitMessage = isDelete ? `chore(process): delete ${processKey}` : `chore(process): update ${processKey}`;
 
         const updated = await githubRequest(putUrl, {
             method: 'PUT',
@@ -179,6 +186,7 @@ exports.handler = async function handler(event, context) {
         return jsonResponse(200, {
             ok: true,
             processKey,
+            deleted: isDelete,
             commit: updated?.commit?.sha || null,
             url: updated?.commit?.html_url || null
         });
