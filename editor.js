@@ -793,6 +793,31 @@ function syncProcessFromDOM() {
 
 function saveProcess() {
     syncProcessFromDOM();
+
+    // If we are creating a new process, we need a stable key so the draft
+    // can be reopened later (otherwise ?process=new always starts EMPTY_PROCESS).
+    if (!currentProcessKey || currentProcessKey === 'new') {
+        let draftKey = prompt('Neuer Prozess-Key (für den Entwurf), z.B. "wareneingang-2":');
+        if (!draftKey) return;
+        draftKey = draftKey.trim();
+        if (!/^[a-z0-9\-]{3,64}$/.test(draftKey)) {
+            alert('Ungültiger Key. Erlaubt: Kleinbuchstaben, Zahlen, Bindestrich (3-64 Zeichen).');
+            return;
+        }
+
+        currentProcessKey = draftKey;
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('process', currentProcessKey);
+            window.history.replaceState({}, '', url.toString());
+        } catch {
+            // ignore
+        }
+
+        // Update document id/footer etc.
+        renderProcess();
+        attachEventListeners();
+    }
     
     // In localStorage speichern
     const key = `process_${currentProcessKey}`;
