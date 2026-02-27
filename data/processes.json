@@ -1957,20 +1957,6 @@
       ]
     },
     {
-      "key": "test1",
-      "category": "unterstuetzung",
-      "title": "Neuer1^2 Pr22ozess",
-      "description": "",
-      "swimlanes": [
-        {
-          "name": "Bereich 1",
-          "height": 300,
-          "boxes": []
-        }
-      ],
-      "connections": []
-    },
-    {
       "key": "wwwww",
       "category": "unterstuetzung",
       "title": "Neuer P^12^12rozess",
